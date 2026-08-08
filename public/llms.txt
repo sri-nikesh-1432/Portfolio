@@ -1,0 +1,42 @@
+# Datta Srinikesh Chinta - AI Systems Engineer
+
+> "Building end-to-end AI products with intelligence, precision, and voice integration."
+
+## Personal Information
+- **Name**: Datta Srinikesh Chinta
+- **Location**: Hyderabad, Telangana, India
+- **Title**: AI Systems Engineer & AI/ML Developer
+- **Education**: B.Tech in Artificial Intelligence & Machine Learning (2024 - 2028), R.M.D Engineering College | CGPA: 7.96
+- **Email**: srinikeshchinta@gmail.com
+- **Phone**: +91 8309594383
+- **Portfolio**: https://dattasrinikeshchinta.netlify.app/
+- **GitHub**: https://github.com/sri-nikesh-1432
+- **LinkedIn**: https://www.linkedin.com/in/datta-srinikesh-chinta-986064333/
+
+## Core Expertise
+- **AI/ML Systems**: Artificial Intelligence, Machine Learning, Deep Learning, Generative AI, Large Language Models (LLMs), Retrieval-Augmented Generation (RAG), Conversational AI, Voice AI, Prompt Engineering, Semantic Search, Embeddings, Vector Databases, Autonomous AI Agents.
+- **Languages**: Python (Expert ⭐⭐⭐⭐⭐), Java, SQL, JavaScript, TypeScript.
+- **Frameworks & Tools**: FastAPI, React, TypeScript, Vite, Pandas, NumPy, Scikit-learn, Plotly, Matplotlib, Seaborn, Git, GitHub, VS Code, Render, Netlify.
+- **AI Models & Services**: Groq, Whisper, Llama 3, Claude, Hugging Face, MongoDB GenAI.
+
+## Experience
+1. **Artificial Intelligence Intern - Venixa Private Limited** (Jun 2026 – Jul 2026)
+   - Architected end-to-end AI-powered Multilingual Voice Booking and Assistant system.
+   - Built full Speech-to-Text (Whisper) -> LLM (Groq Llama 3) -> Text-to-Speech pipeline in FastAPI + React.
+2. **AI Developer Intern - VISWAM.AI (IIIT Hyderabad / SWECHA)** (May 2025 – Jun 2025)
+   - Developed real-world machine learning models and research workflows in Python.
+
+## Key Projects
+1. **AI Powered Multi-Lingual Voice Agent**: Speech-to-Text + LLM + Text-to-Speech complete voice workflow (Live: https://venixaintern.netlify.app/)
+2. **RAG Studio**: Full interactive document ingestion, chunking, embeddings, vector retrieval, and LLM Q&A platform (Live: https://ragstudiopro.netlify.app/)
+3. **AI-IoT Fragrance Detection Research**: Pre-publication research paper on spectroscopic learning for fragrance classification and AI generation.
+4. **Netflix Exploratory Data Analysis**: Data cleaning, visualization, regional content distribution analysis.
+
+## Certifications & Achievements
+- Oracle Certified: OCI 2025 Generative AI Professional, OCI 2025 Data Science Professional
+- MongoDB Certified: GenAI Developer, Building AI Agents
+- Anthropic: Claude 101, Claude Code in Action
+- Google: Cloud AI & Analytics Individual Qualification
+- Databricks: Fundamentals Accreditation
+- HackerRank: Python, SQL
+- Music Achievement: Trinity College London OFQUAL Certified - Grade 4 Practical & Grade 4 Theory (8 Trinity Certifications total).
