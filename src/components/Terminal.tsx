@@ -20,7 +20,7 @@ interface TerminalProps {
 
 const CMD_HELP = `Available commands
 -------------------
-  about         Who is Srinikesh
+  about         Who is Datta Srinikesh Chinta
   projects      The 2 completed projects
   building      Projects currently in development
   research      Pre-publication research
@@ -49,7 +49,7 @@ export const Terminal: React.FC<TerminalProps> = ({ open, onClose }) => {
       bootedRef.current = true;
       const boot: TerminalEntry[] = [
         { id: `b-${Date.now()}`, type: 'ascii', content: TERMINAL_ASCII },
-        { id: `b-${Date.now() + 1}`, type: 'system', content: 'SRINIKESH OS v2.0 — portfolio interface' },
+        { id: `b-${Date.now() + 1}`, type: 'system', content: 'DATTA SRINIKESH CHINTA OS v2.0 — portfolio interface' },
         { id: `b-${Date.now() + 2}`, type: 'system', content: 'Type "help" to see available commands.' },
       ];
       setEntries(boot);
@@ -226,7 +226,7 @@ export const Terminal: React.FC<TerminalProps> = ({ open, onClose }) => {
           <div className="flex items-center gap-2">
             <TerminalSquare className="h-4 w-4 text-cyan-300" />
             <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-300">
-              srinikesh@portfolio ~ terminal
+              datta-srinikesh-chinta@portfolio ~ terminal
             </span>
           </div>
           <button

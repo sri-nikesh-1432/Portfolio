@@ -45,7 +45,7 @@ export const SuggestionModal: React.FC<SuggestionModalProps> = ({ open, projectN
     e.preventDefault();
     const subject = `[Portfolio] Suggestion for ${projectName}`;
     const body = [
-      'Hi Srinikesh,',
+      'Hi Datta Srinikesh Chinta,',
       '',
       `Project: ${projectName}`,
       '',
@@ -121,7 +121,7 @@ export const SuggestionModal: React.FC<SuggestionModalProps> = ({ open, projectN
               <p className="mx-auto mt-2 max-w-sm text-[13.5px] leading-relaxed text-muted">
                 Your email app should have opened with everything pre-filled for{' '}
                 <span className="font-medium text-ink">{PERSONAL.email}</span>. Just press send —
-                it reaches Srinikesh directly.
+                it reaches Datta Srinikesh Chinta directly.
               </p>
             </div>
             <button
@@ -193,7 +193,7 @@ export const SuggestionModal: React.FC<SuggestionModalProps> = ({ open, projectN
                 type="submit"
                 className="holo-sheen inline-flex items-center gap-2 rounded-xl bg-ink px-5 py-3 font-mono text-[10.5px] font-medium uppercase tracking-[0.16em] text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift"
               >
-                Send to Srinikesh
+                Send to Datta Srinikesh Chinta
                 <Send className="h-3.5 w-3.5 text-accent-teal" />
               </button>
             </div>

@@ -280,6 +280,27 @@ body {
   color: #2c2a28;
 }
 
+/* ---------- Endorsement modal scroll area ---------- */
+.endorse-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(70, 110, 160, 0.25) transparent;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+.endorse-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.endorse-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.endorse-scroll::-webkit-scrollbar-thumb {
+  background: rgba(70, 110, 160, 0.25);
+  border-radius: 999px;
+}
+.endorse-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(70, 110, 160, 0.4);
+}
+
 /* ---------- Terminal ---------- */
 .term-scroll::-webkit-scrollbar {
   width: 5px;

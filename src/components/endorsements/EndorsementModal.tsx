@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { BadgeCheck, ShieldCheck, X } from 'lucide-react';
 import { submitEndorsement, EndorsementError } from '../../lib/endorsementsApi';
 import { PERSONAL } from '../../data/portfolioData';
@@ -37,6 +37,7 @@ export const EndorsementModal: React.FC<EndorsementModalProps> = ({
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [successCount, setSuccessCount] = useState<number | null>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (open) {
@@ -51,21 +52,55 @@ export const EndorsementModal: React.FC<EndorsementModalProps> = ({
     }
   }, [open, skill]);
 
+  // Body scroll lock + focus trap + Escape to close. The page behind never scrolls
+  // while the modal is open; only the modal's own scroll area is scrollable.
   useEffect(() => {
     if (!open) return;
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [open, onClose]);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
 
-  useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : '';
-    return () => {
-      document.body.style.overflow = '';
+    const modal = modalRef.current;
+    const focusables = () =>
+      modal
+        ? Array.from(
+            modal.querySelectorAll<HTMLElement>(
+              'button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), a[href]'
+            )
+          )
+        : [];
+
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const list = focusables();
+      if (list.length === 0) return;
+      const first = list[0];
+      const last = list[list.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      if (e.shiftKey && (active === first || !modal?.contains(active))) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (active === last || !modal?.contains(active))) {
+        e.preventDefault();
+        first.focus();
+      }
     };
-  }, [open]);
+
+    // Focus the first field when the modal opens (not the header close button).
+    const focusTimer = window.setTimeout(() => {
+      modal?.querySelector<HTMLElement>('#end-name')?.focus();
+    }, 60);
+
+    window.addEventListener('keydown', handler);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.clearTimeout(focusTimer);
+      window.removeEventListener('keydown', handler);
+    };
+  }, [open, onClose]);
 
   if (!open) return null;
 
@@ -119,18 +154,19 @@ export const EndorsementModal: React.FC<EndorsementModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/50 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/50 p-2 backdrop-blur-sm sm:p-4"
       onClick={onClose}
     >
       <div
-        className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-2xl"
+        ref={modalRef}
+        className="flex h-[calc(100dvh-16px)] w-[calc(100vw-16px)] max-w-[720px] flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-2xl sm:h-auto sm:max-h-[calc(100dvh-32px)] sm:w-[min(720px,calc(100vw-32px))]"
         role="dialog"
         aria-modal="true"
         aria-label={`Endorse ${skill}`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-line bg-white/80 px-5 py-3.5">
+        {/* Header — always visible */}
+        <div className="flex shrink-0 items-center justify-between border-b border-line bg-white/80 px-5 py-3.5">
           <div className="flex items-center gap-2.5">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-accent-blue to-accent-teal text-white">
               <BadgeCheck className="h-4 w-4" />
@@ -153,9 +189,9 @@ export const EndorsementModal: React.FC<EndorsementModalProps> = ({
           </button>
         </div>
 
-        {/* Body */}
+        {/* Body — the only scrollable region */}
         {successCount !== null ? (
-          <div className="flex flex-col items-center gap-4 px-8 py-12 text-center">
+          <div className="endorse-scroll flex min-h-0 flex-1 flex-col items-center gap-4 overflow-y-auto px-8 py-12 text-center">
             <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-status-green/10 text-status-green">
               <BadgeCheck className="h-6 w-6" />
             </span>
@@ -177,115 +213,119 @@ export const EndorsementModal: React.FC<EndorsementModalProps> = ({
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} noValidate className="term-scroll overflow-y-auto px-6 py-5">
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="end-name" className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-faint">
-                  Full name <span className="text-accent-red">*</span>
-                </label>
-                <input
-                  id="end-name"
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                    if (errors.name) setErrors((prev) => ({ ...prev, name: undefined }));
-                  }}
-                  placeholder="Your name"
-                  className={`mt-1.5 ${inputClass} ${errors.name ? 'border-accent-red/50' : ''}`}
-                />
-                {errors.name && (
-                  <p className="mt-1.5 text-[12px] text-accent-red">{errors.name}</p>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="end-role" className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-faint">
-                  Role / Position <span className="text-accent-red">*</span>
-                </label>
-                <input
-                  id="end-role"
-                  value={role}
-                  onChange={(e) => {
-                    setRole(e.target.value);
-                    if (errors.role) setErrors((prev) => ({ ...prev, role: undefined }));
-                  }}
-                  placeholder="Software Engineer"
-                  className={`mt-1.5 ${inputClass} ${errors.role ? 'border-accent-red/50' : ''}`}
-                />
-                {errors.role && (
-                  <p className="mt-1.5 text-[12px] text-accent-red">{errors.role}</p>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="end-email" className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-faint">
-                  Email <span className="text-accent-red">*</span>
-                </label>
-                <input
-                  id="end-email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
-                  }}
-                  placeholder="name@example.com"
-                  className={`mt-1.5 ${inputClass} ${errors.email ? 'border-accent-red/50' : ''}`}
-                />
-                {errors.email && (
-                  <p className="mt-1.5 text-[12px] text-accent-red">{errors.email}</p>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="end-compliment" className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-faint">
-                  Compliments or Suggestions (Optional)
-                </label>
-                <textarea
-                  id="end-compliment"
-                  value={compliment}
-                  onChange={(e) => setCompliment(e.target.value)}
-                  rows={3}
-                  maxLength={500}
-                  placeholder="Share a short compliment, feedback, or suggestion..."
-                  className={`mt-1.5 resize-none ${inputClass}`}
-                />
-              </div>
-
-              {/* Consent + privacy notice */}
-              <div className="rounded-xl border border-line bg-white/70 p-4">
-                <label className="flex cursor-pointer items-start gap-2.5">
+          <form onSubmit={handleSubmit} noValidate className="flex min-h-0 flex-1 flex-col">
+            {/* Scrollable form content */}
+            <div className="endorse-scroll min-h-0 flex-1 overflow-y-auto px-6 py-5">
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="end-name" className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-faint">
+                    Full name <span className="text-accent-red">*</span>
+                  </label>
                   <input
-                    type="checkbox"
-                    checked={consent}
+                    id="end-name"
+                    value={name}
                     onChange={(e) => {
-                      setConsent(e.target.checked);
-                      if (errors.consent) setErrors((prev) => ({ ...prev, consent: undefined }));
+                      setName(e.target.value);
+                      if (errors.name) setErrors((prev) => ({ ...prev, name: undefined }));
                     }}
-                    className="mt-0.5 h-4 w-4 shrink-0 accent-[#B0893F]"
+                    placeholder="Your name"
+                    className={`mt-1.5 ${inputClass} ${errors.name ? 'border-accent-red/50' : ''}`}
                   />
-                  <span className="text-[12.5px] leading-relaxed text-inkSoft">
-                    I agree to have my name and professional role displayed as an endorsement.
-                  </span>
-                </label>
-                {errors.consent && (
-                  <p className="mt-1.5 text-[12px] text-accent-red">{errors.consent}</p>
-                )}
-                <p className="mt-3 flex items-start gap-2 text-[11.5px] leading-relaxed text-muted">
-                  <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-status-green" />
-                  Your name, role, and email will be used only to record this professional
-                  endorsement. Your email is never shown publicly.
-                </p>
-              </div>
+                  {errors.name && (
+                    <p className="mt-1.5 text-[12px] text-accent-red">{errors.name}</p>
+                  )}
+                </div>
 
-              {errors.form && (
-                <p className="rounded-xl bg-accent-red/8 px-3.5 py-2.5 text-[12.5px] leading-relaxed text-accent-red">
-                  {errors.form}
-                </p>
-              )}
+                <div>
+                  <label htmlFor="end-role" className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-faint">
+                    Role / Position <span className="text-accent-red">*</span>
+                  </label>
+                  <input
+                    id="end-role"
+                    value={role}
+                    onChange={(e) => {
+                      setRole(e.target.value);
+                      if (errors.role) setErrors((prev) => ({ ...prev, role: undefined }));
+                    }}
+                    placeholder="Software Engineer"
+                    className={`mt-1.5 ${inputClass} ${errors.role ? 'border-accent-red/50' : ''}`}
+                  />
+                  {errors.role && (
+                    <p className="mt-1.5 text-[12px] text-accent-red">{errors.role}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label htmlFor="end-email" className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-faint">
+                    Email <span className="text-accent-red">*</span>
+                  </label>
+                  <input
+                    id="end-email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
+                    }}
+                    placeholder="name@example.com"
+                    className={`mt-1.5 ${inputClass} ${errors.email ? 'border-accent-red/50' : ''}`}
+                  />
+                  {errors.email && (
+                    <p className="mt-1.5 text-[12px] text-accent-red">{errors.email}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label htmlFor="end-compliment" className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-faint">
+                    Compliments or Suggestions (Optional)
+                  </label>
+                  <textarea
+                    id="end-compliment"
+                    value={compliment}
+                    onChange={(e) => setCompliment(e.target.value)}
+                    rows={3}
+                    maxLength={500}
+                    placeholder="Share a short compliment, feedback, or suggestion..."
+                    className={`mt-1.5 resize-none ${inputClass}`}
+                  />
+                </div>
+
+                {/* Consent + privacy notice */}
+                <div className="rounded-xl border border-line bg-white/70 p-4">
+                  <label className="flex cursor-pointer items-start gap-2.5">
+                    <input
+                      type="checkbox"
+                      checked={consent}
+                      onChange={(e) => {
+                        setConsent(e.target.checked);
+                        if (errors.consent) setErrors((prev) => ({ ...prev, consent: undefined }));
+                      }}
+                      className="mt-0.5 h-4 w-4 shrink-0 accent-[#B0893F]"
+                    />
+                    <span className="text-[12.5px] leading-relaxed text-inkSoft">
+                      I agree to have my name and professional role displayed as an endorsement.
+                    </span>
+                  </label>
+                  {errors.consent && (
+                    <p className="mt-1.5 text-[12px] text-accent-red">{errors.consent}</p>
+                  )}
+                  <p className="mt-3 flex items-start gap-2 text-[11.5px] leading-relaxed text-muted">
+                    <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-status-green" />
+                    Your name, role, and email will be used only to record this professional
+                    endorsement. Your email is never shown publicly.
+                  </p>
+                </div>
+
+                {errors.form && (
+                  <p className="rounded-xl bg-accent-red/8 px-3.5 py-2.5 text-[12.5px] leading-relaxed text-accent-red">
+                    {errors.form}
+                  </p>
+                )}
+              </div>
             </div>
 
-            <div className="mt-6 flex items-center justify-end gap-3">
+            {/* Footer — always visible, outside the scroll area */}
+            <div className="flex shrink-0 items-center justify-end gap-3 border-t border-line bg-white/80 px-6 py-4">
               <button
                 type="button"
                 onClick={onClose}

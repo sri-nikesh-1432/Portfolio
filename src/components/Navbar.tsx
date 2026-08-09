@@ -61,7 +61,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTerminal }) => {
               </span>
               <span className="flex flex-col leading-none">
                 <span className="font-display text-[16px] font-semibold tracking-tight text-[#F4EBDC]">
-                  Srinikesh
+                  Datta Srinikesh Chinta
                 </span>
                 <span className="mt-1 font-mono text-[8.5px] uppercase tracking-[0.22em] text-[#C9A24B]">
                   AI Systems Engineer
