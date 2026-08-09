@@ -68,7 +68,15 @@ export const Music: React.FC = () => {
         {/* Trinity College London achievements */}
         <div className="mt-16 text-center md:mt-24">
           <Reveal>
-            <p className="eyebrow text-[#B89B5E]">Achievements</p>
+            <div className="mx-auto flex w-fit items-center justify-center rounded-2xl bg-white/85 px-8 py-4 shadow-[0_10px_30px_-18px_rgba(25,25,25,0.3)] ring-1 ring-[#E8DED0]">
+              <img
+                src="/trinity-college-london-logo.png"
+                alt="Trinity College London logo"
+                loading="lazy"
+                className="h-10 w-auto object-contain md:h-12"
+              />
+            </div>
+            <p className="eyebrow mt-6 text-[#B89B5E]">Achievements</p>
             <h3 className="mt-3 font-display text-3xl font-medium text-[#191919] md:text-4xl">
               Trinity College London
             </h3>
