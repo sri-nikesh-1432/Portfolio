@@ -49,7 +49,7 @@ export const ResearchManuscript: React.FC = () => {
                 {RESEARCH.title}
               </h1>
               <p className="mt-3 font-mono text-[10.5px] uppercase tracking-[0.16em] text-ink/55">
-                {RESEARCH.field}
+                {RESEARCH.field} · {RESEARCH.date}
               </p>
               <p className="mt-4 text-[12.5px] text-ink/70">
                 Datta Srinikesh Chinta — R.M.D Engineering College · Department of AI & Machine Learning
@@ -71,14 +71,16 @@ export const ResearchManuscript: React.FC = () => {
                 </p>
                 <p className="mt-3 flex items-center gap-2 font-display text-[12px] italic text-ink/60">
                   <span className="h-3 w-3 rounded-full border border-ink/30 bg-accent-gold/30" />
-                  "optical fingerprint — validate experimentally"
+                  smart perfumery · counterfeit detection · fragrance generation
                 </p>
               </section>
 
               {RESEARCH_SECTIONS.map((sec, i) => (
                 <section
                   key={sec.id}
-                  className={i === 0 || i === 3 ? 'md:col-span-2' : undefined}
+                  className={
+                    sec.blocks.some((b) => b.type === 'table') ? 'md:col-span-2' : undefined
+                  }
                 >
                   <h2 className="flex items-center gap-2 font-display text-[14px] font-semibold uppercase tracking-wide text-ink">
                     <span className="font-mono text-[10px] text-accent-red">
@@ -86,45 +88,93 @@ export const ResearchManuscript: React.FC = () => {
                     </span>
                     {sec.title}
                   </h2>
-                  <p className="mt-2 text-[12.5px] leading-relaxed text-ink/80">{sec.body}</p>
 
-                  {sec.id === 'methodology' && (
-                    <div className="mt-4 rounded-lg border border-ink/15 bg-white/60 p-3 font-mono text-[11px] leading-relaxed text-ink/75">
-                      <p className="text-ink/50">Spectral mixture model</p>
-                      <p className="mt-1 font-display text-[14px] italic">S_total = Σ wᵢSᵢ</p>
-                      <p className="mt-1 text-ink/60">A = εcl &nbsp;·&nbsp; E = hν</p>
-                    </div>
-                  )}
-
-                  {sec.id === 'results' && (
-                    <div className="mt-4">
-                      <div className="overflow-hidden rounded-lg border border-ink/15">
-                        <table className="w-full text-left font-mono text-[11px]">
-                          <thead>
-                            <tr className="border-b border-ink/15 bg-ink/4 text-[10px] uppercase tracking-[0.12em] text-ink/60">
-                              <th className="px-3 py-2">Sample</th>
-                              <th className="px-3 py-2">Predicted Family</th>
-                              <th className="px-3 py-2 text-right">Confidence</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {RESEARCH.samples.map((s) => (
-                              <tr key={s.sample} className="border-b border-ink/8 last:border-0">
-                                <td className="px-3 py-2 text-ink/80">{s.sample}</td>
-                                <td className="px-3 py-2 text-ink/80">{s.predicted}</td>
-                                <td className="px-3 py-2 text-right font-semibold text-ink">
-                                  {s.confidence}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                      <p className="mt-2 font-display text-[11.5px] italic text-ink/60">
-                        "need more independent samples"
-                      </p>
-                    </div>
-                  )}
+                  <div className="mt-2">
+                    {sec.blocks.map((b, j) => {
+                      switch (b.type) {
+                        case 'p':
+                          return (
+                            <p key={j} className="mt-2.5 text-[12.5px] leading-relaxed text-ink/80">
+                              {b.text}
+                            </p>
+                          );
+                        case 'list':
+                          return (
+                            <div key={j} className="mt-3">
+                              {b.heading && (
+                                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-ink/60">
+                                  {b.heading}
+                                </p>
+                              )}
+                              <ul className="mt-2 space-y-1.5">
+                                {b.items.map((it) => (
+                                  <li
+                                    key={it}
+                                    className="flex items-start gap-2 text-[12.5px] leading-relaxed text-ink/80"
+                                  >
+                                    <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full border border-ink/30 bg-accent-gold/40" />
+                                    {it}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          );
+                        case 'table':
+                          return (
+                            <div key={j} className="mt-4 overflow-hidden rounded-lg border border-ink/15">
+                              <p className="border-b border-ink/15 bg-ink/4 px-3 py-2 font-mono text-[9.5px] uppercase tracking-[0.14em] text-ink/55">
+                                {b.caption}
+                              </p>
+                              <table className="w-full text-left font-mono text-[11px]">
+                                <thead>
+                                  <tr className="border-b border-ink/15 bg-ink/4 text-[10px] uppercase tracking-[0.12em] text-ink/60">
+                                    {b.headers.map((h) => (
+                                      <th key={h} className="px-3 py-2">
+                                        {h}
+                                      </th>
+                                    ))}
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {b.rows.map((row, r) => (
+                                    <tr key={r} className="border-b border-ink/8 last:border-0">
+                                      {row.map((cell, c) => (
+                                        <td key={c} className="px-3 py-2 text-ink/80">
+                                          {cell}
+                                        </td>
+                                      ))}
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          );
+                        case 'equations':
+                          return (
+                            <div
+                              key={j}
+                              className="mt-4 rounded-lg border border-ink/15 bg-white/60 p-3 font-mono text-[11px] leading-relaxed text-ink/75"
+                            >
+                              {b.items.map((eq) => (
+                                <p
+                                  key={eq.label}
+                                  className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1"
+                                >
+                                  <span className="text-[9.5px] uppercase tracking-[0.14em] text-ink/50">
+                                    {eq.label}
+                                  </span>
+                                  <span className="font-display text-[15px] italic text-ink">
+                                    {eq.equation}
+                                  </span>
+                                </p>
+                              ))}
+                            </div>
+                          );
+                        default:
+                          return null;
+                      }
+                    })}
+                  </div>
                 </section>
               ))}
             </div>
@@ -164,15 +214,36 @@ export const ResearchManuscript: React.FC = () => {
                 References
               </h2>
               <ol className="mt-3 space-y-2 font-mono text-[10.5px] leading-relaxed text-ink/65">
-                <li>[1] Beer–Lambert law and optical absorbance in volatile compound analysis.</li>
-                <li>[2] 1D convolutional neural networks for spectral signal classification.</li>
-                <li>[3] Low-cost IoT spectroscopy with ESP32-class controllers.</li>
-                <li>[4] Retrieval and generative approaches to fragrance composition.</li>
-                <li>[5] Biomimetic navigation and sensory intelligence (marine, space & defence).</li>
+                {RESEARCH.references.map((ref, i) => (
+                  <li key={i}>
+                    [{i + 1}] {ref}
+                  </li>
+                ))}
               </ol>
               <p className="mt-4 font-mono text-[9.5px] uppercase tracking-[0.18em] text-ink/45">
                 Manuscript status: {RESEARCH.status} · Not peer-reviewed · Not published
               </p>
+            </section>
+
+            {/* Acknowledgments */}
+            <section className="mt-10 border-t border-ink/15 pt-6">
+              <h2 className="font-display text-[14px] font-semibold uppercase tracking-wide text-ink">
+                References and Support
+              </h2>
+              <p className="mt-3 text-[12.5px] leading-relaxed text-ink/80">
+                {RESEARCH.acknowledgments.intro}
+              </p>
+              <ul className="mt-3 space-y-1.5">
+                {RESEARCH.acknowledgments.people.map((p) => (
+                  <li
+                    key={p}
+                    className="flex items-start gap-2 font-mono text-[11px] leading-relaxed text-ink/65"
+                  >
+                    <span className="mt-[6px] h-1.5 w-1.5 shrink-0 rounded-full border border-ink/30 bg-accent-gold/40" />
+                    {p}
+                  </li>
+                ))}
+              </ul>
             </section>
           </div>
         </article>

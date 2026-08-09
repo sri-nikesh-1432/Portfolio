@@ -43,58 +43,7 @@ export const Home: React.FC = () => {
 
   return (
     <div className="space-y-28 md:space-y-36">
-      {/* ---------------- ABOUT / IDENTITY ---------------- */}
-      <section>
-        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
-          <SectionHeading
-            eyebrow="About"
-            title={<>Building intelligence, not just software.</>}
-            description=""
-          />
-          <Reveal delay={120}>
-            <div className="space-y-5 text-[15px] leading-relaxed text-inkSoft">
-              <p>
-                I'm <span className="font-medium text-ink">{PERSONAL.name}</span> — an AI/ML engineer
-                and builder focused on creating intelligent systems that combine machine learning,
-                generative AI, voice interfaces, retrieval-augmented generation, computer vision and
-                autonomous agents.
-              </p>
-              <p>
-                My work spans multilingual conversational systems, AI telecalling, RAG platforms,
-                agent orchestration, biomimetic research and full-stack AI products. I'm currently a{' '}
-                <span className="font-medium text-ink">B.Tech AI & ML student at R.M.D Engineering College</span>{' '}
-                ({PERSONAL.education.period}, CGPA {PERSONAL.education.cgpa}), pursuing the goal of
-                becoming an AI Systems Engineer who ships complete products.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {PERSONAL.interests.map((i) => (
-                  <span
-                    key={i}
-                    className="wood-chip inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] text-inkSoft"
-                  >
-                    <Sparkles className="h-3 w-3 text-accent-gold" />
-                    {i}
-                  </span>
-                ))}
-              </div>
-              <div className="flex items-center gap-3 pt-2">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-accent-gold to-accent-copper text-white">
-                  <Languages className="h-4 w-4" />
-                </span>
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-accent-copper to-accent-rosewood text-white">
-                  <Ear className="h-4 w-4" />
-                </span>
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-accent-gold to-accent-red text-white">
-                  <TerminalSquare className="h-4 w-4" />
-                </span>
-                <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-faint">
-                  voice · agents · systems
-                </span>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
+
 
       {/* ---------------- HERO ---------------- */}
       <section className="relative pt-6 md:pt-12">
@@ -120,22 +69,51 @@ export const Home: React.FC = () => {
                 .
               </h1>
             </Reveal>
-
             <Reveal delay={220}>
-              <p className="mt-7 max-w-xl text-[15.5px] leading-relaxed text-muted text-balance">
-                {PERSONAL.tagline}
-              </p>
-            </Reveal>
-
-            <Reveal delay={320}>
-              <div className="wood-sign relative mt-5 max-w-xl rounded-xl px-5 py-4">
-                <span className="brass-stud absolute -left-[5px] -top-[5px]" />
-                <span className="brass-stud absolute -right-[5px] -top-[5px]" />
-                <span className="brass-stud absolute -bottom-[5px] -left-[5px]" />
-                <span className="brass-stud absolute -bottom-[5px] -right-[5px]" />
-                <p className="font-display text-[15px] italic text-[#F2E4C9]">
-                  "{PERSONAL.positioning}"
-                </p>
+              <div className="mt-8 max-w-xl border-t border-accent-gold/25 pt-6">
+                <h2 className="font-display text-[22px] font-medium leading-snug text-ink">
+                  Building intelligence, not just software.
+                </h2>
+                <div className="mt-4 space-y-4 text-[15px] leading-relaxed text-inkSoft">
+                  <p>
+                    I'm <span className="font-medium text-ink">{PERSONAL.name}</span> — an AI/ML engineer
+                    and builder focused on creating intelligent systems that combine machine learning,
+                    generative AI, voice interfaces, retrieval-augmented generation, computer vision and
+                    autonomous agents.
+                  </p>
+                  <p>
+                    My work spans multilingual conversational systems, AI telecalling, RAG platforms,
+                    agent orchestration, biomimetic research and full-stack AI products. I'm currently a{' '}
+                    <span className="font-medium text-ink">B.Tech AI & ML student at R.M.D Engineering College</span>{' '}
+                    ({PERSONAL.education.period}, CGPA {PERSONAL.education.cgpa}), pursuing the goal of
+                    becoming an AI Systems Engineer who ships complete products.
+                  </p>
+                </div>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {PERSONAL.interests.map((i) => (
+                    <span
+                      key={i}
+                      className="wood-chip inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] text-inkSoft"
+                    >
+                      <Sparkles className="h-3 w-3 text-accent-gold" />
+                      {i}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-4 flex items-center gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-accent-gold to-accent-copper text-white">
+                    <Languages className="h-4 w-4" />
+                  </span>
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-accent-copper to-accent-rosewood text-white">
+                    <Ear className="h-4 w-4" />
+                  </span>
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-accent-gold to-accent-red text-white">
+                    <TerminalSquare className="h-4 w-4" />
+                  </span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-faint">
+                    voice · agents · systems
+                  </span>
+                </div>
               </div>
             </Reveal>
 

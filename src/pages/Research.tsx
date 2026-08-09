@@ -34,7 +34,7 @@ export const Research: React.FC = () => {
                 {RESEARCH.title}
               </h2>
               <p className="mt-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted">
-                {RESEARCH.field}
+                {RESEARCH.field} · {RESEARCH.date}
               </p>
 
               <p className="mt-5 max-w-2xl text-[14.5px] leading-relaxed text-inkSoft">
@@ -130,21 +130,111 @@ export const Research: React.FC = () => {
         </div>
       </section>
 
-      {/* Manuscript sections */}
+      {/* The research paper */}
       <section>
         <SectionHeading
-          eyebrow="From the Manuscript"
-          title={<>Selected manuscript sections</>}
-          description="A preview of the research structure — the full two-column manuscript is available in the viewer."
+          eyebrow="The Research Paper"
+          title={<>The complete manuscript, section by section.</>}
+          description="Every section of the paper — abstract, methodology, physics and chemistry, machine learning approach, IoT integration, results, discussion and conclusion — with its tables and equations."
         />
         <div className="mt-10 grid gap-5 md:grid-cols-2">
-          {RESEARCH_SECTIONS.slice(0, 4).map((sec, i) => (
-            <Reveal key={sec.id} delay={i * 60}>
+          {RESEARCH_SECTIONS.map((sec, i) => (
+            <Reveal
+              key={sec.id}
+              delay={i * 40}
+              className={sec.blocks.some((b) => b.type === 'table') ? 'md:col-span-2' : undefined}
+            >
               <article className="glass glass-hover h-full rounded-2xl p-6">
                 <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent-red">
                   {String(i + 1).padStart(2, '0')} · {sec.title}
                 </p>
-                <p className="mt-3 text-[13.5px] leading-relaxed text-muted">{sec.body}</p>
+
+                <div className="mt-3">
+                  {sec.blocks.map((b, j) => {
+                    switch (b.type) {
+                      case 'p':
+                        return (
+                          <p key={j} className="mt-2.5 text-[13.5px] leading-relaxed text-muted">
+                            {b.text}
+                          </p>
+                        );
+                      case 'list':
+                        return (
+                          <div key={j} className="mt-4">
+                            {b.heading && (
+                              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-inkSoft">
+                                {b.heading}
+                              </p>
+                            )}
+                            <ul className="mt-2 space-y-1.5">
+                              {b.items.map((it) => (
+                                <li
+                                  key={it}
+                                  className="flex items-start gap-2 text-[13px] leading-relaxed text-muted"
+                                >
+                                  <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full border border-accent-gold/50 bg-accent-gold/40" />
+                                  {it}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        );
+                      case 'table':
+                        return (
+                          <div key={j} className="mt-4 overflow-hidden rounded-xl border border-line bg-white/50">
+                            <p className="border-b border-line bg-white/60 px-3 py-2 font-mono text-[9.5px] uppercase tracking-[0.14em] text-muted">
+                              {b.caption}
+                            </p>
+                            <table className="w-full text-left font-mono text-[11px]">
+                              <thead>
+                                <tr className="border-b border-line bg-white/60 text-[10px] uppercase tracking-[0.12em] text-inkSoft">
+                                  {b.headers.map((h) => (
+                                    <th key={h} className="px-3 py-2">
+                                      {h}
+                                    </th>
+                                  ))}
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {b.rows.map((row, r) => (
+                                  <tr key={r} className="border-b border-line/60 last:border-0">
+                                    {row.map((cell, c) => (
+                                      <td key={c} className="px-3 py-2 text-inkSoft">
+                                        {cell}
+                                      </td>
+                                    ))}
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        );
+                      case 'equations':
+                        return (
+                          <div
+                            key={j}
+                            className="mt-4 rounded-xl border border-line bg-white/50 p-3 font-mono text-[11px] text-inkSoft"
+                          >
+                            {b.items.map((eq) => (
+                              <p
+                                key={eq.label}
+                                className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1"
+                              >
+                                <span className="text-[9.5px] uppercase tracking-[0.14em] text-muted">
+                                  {eq.label}
+                                </span>
+                                <span className="font-display text-[16px] italic text-ink">
+                                  {eq.equation}
+                                </span>
+                              </p>
+                            ))}
+                          </div>
+                        );
+                      default:
+                        return null;
+                    }
+                  })}
+                </div>
               </article>
             </Reveal>
           ))}

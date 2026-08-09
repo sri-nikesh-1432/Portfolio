@@ -296,20 +296,39 @@ export const BUILDING_PROJECTS: BuildingProject[] = [
 /*  RESEARCH                                                           */
 /* ------------------------------------------------------------------ */
 
+/* ------------------------------------------------------------------ */
+/*  RESEARCH                                                           */
+/* ------------------------------------------------------------------ */
+
+type ResearchBlock =
+  | { type: 'p'; text: string }
+  | { type: 'list'; heading?: string; items: string[] }
+  | { type: 'table'; caption: string; headers: string[]; rows: string[][] }
+  | { type: 'equations'; items: { label: string; equation: string }[] };
+
+interface ResearchSectionData {
+  id: string;
+  title: string;
+  blocks: ResearchBlock[];
+}
+
 export const RESEARCH = {
   id: 'fragrance-research',
-  title: 'AI-IoT Based Fragrance Detection, Analysis & Generation System Using Spectroscopic Learning',
+  title:
+    'AI-IoT Based Fragrance Detection, Analysis & Generation System Using Spectroscopic Learning',
   shortTitle: 'AI-IoT Fragrance Intelligence',
+  date: 'August 03, 2026',
   status: 'YET TO BE PUBLISHED',
   statusLine: 'RESEARCH MANUSCRIPT \u2014 PRE-PUBLICATION VERSION',
   field: 'Spectroscopic Learning \u00b7 AI-IoT \u00b7 ML',
   abstract:
-    'This research proposes an AI-IoT framework for the detection, analysis and generation of fragrance using spectroscopic learning. A fragrance sample is illuminated and its optical absorbance spectrum \u2014 governed by the Beer\u2013Lambert law (A = \u03b5cl) \u2014 is captured by a spectroscopic sensor connected to an ESP32-class IoT controller. Spectral data is preprocessed and classified by a 1D convolutional neural network into fragrance families including Citrus, Floral, Woody, Fruity and Oriental, while top-note / middle-note / base-note structure informs an AI generation stage that composes balanced scent profiles. Preliminary classification results demonstrate high confidence across tested samples, with ongoing work focused on sensor drift compensation, dataset expansion and independent validation.',
+    'In this paper, we try to solve a real-world problem which is fragrance detection and understanding. Normally, perfumes are analyzed using expensive laboratory equipment, but here we think in a different way. Instead of relying completely on chemical laboratory techniques, we combine Artificial Intelligence (AI) and the Internet of Things (IoT). The proposed system captures a fragrance droplet using a spectroscopic sensor, converts the spectral response into numerical data, and then applies machine learning algorithms to predict fragrance notes such as citrus, floral, woody, fruity, or oriental. The system also estimates possible chemical ingredients responsible for the detected fragrance. Furthermore, users can generate customized perfume compositions by selecting fragrance notes, allowing the AI model to recommend a possible formulation based on previously learned spectral patterns. This makes the proposed system suitable for smart perfumery, counterfeit perfume detection, fragrance recommendation, and future intelligent fragrance generation applications.',
   statusBadges: ['YET TO BE PUBLISHED', 'PRE-PUBLICATION RESEARCH'],
   keyEquations: [
-    { label: 'Photon energy', equation: 'E = h\u03bd' },
+    { label: 'Photon energy \u2014 Planck', equation: 'E = h\u03bd' },
     { label: 'Beer\u2013Lambert law', equation: 'A = \u03b5cl' },
     { label: 'Spectral mixture', equation: 'S_total = \u03a3 w\u1d62S\u1d62' },
+    { label: 'Prediction function', equation: 'y = f(X)' },
   ],
   samples: [
     { sample: 'Perfume A', predicted: 'Citrus', confidence: '95.4%' },
@@ -320,63 +339,184 @@ export const RESEARCH = {
   ],
   families: ['Citrus', 'Floral', 'Woody', 'Fruity', 'Oriental'],
   notes: [
-    'Need more independent samples.',
+    'need more independent samples.',
     'raw spectrum \u2192 preprocessing',
     'feature extraction?',
     'CNN?',
     'test with mixed samples',
-    'need larger dataset',
     'sensor drift?',
-    'optical fingerprint',
-    'absorption depends on molecular structure',
     'validate experimentally',
+    'temperature & humidity influence',
   ],
   pipeline: [
-    { stage: 'Sample', detail: 'Fragrance droplet on spectroscopic sensor' },
-    { stage: 'Optics', detail: 'Light passes through / interacts with sample' },
-    { stage: 'Spectrum', detail: 'Spectral waveform / absorption graph captured' },
-    { stage: 'IoT', detail: 'ESP32 / Raspberry Pi reads sensor data' },
-    { stage: 'AI Model', detail: '1D CNN classification from spectral features' },
-    { stage: 'Output', detail: 'Fragrance family \u00b7 note structure \u00b7 generation' },
+    { stage: 'Fragrance Sample', detail: 'Perfume droplet on a transparent testing substrate' },
+    { stage: 'Spectroscopic Sensor', detail: 'Illumination & spectral response capture' },
+    { stage: 'Signal Processing', detail: 'ADC conversion into numerical spectral values' },
+    { stage: 'IoT Controller', detail: 'ESP32 / Raspberry Pi transmits data over Wi-Fi' },
+    { stage: 'ML Model', detail: 'CNN / classifiers predict family, notes & ingredients' },
+    { stage: 'Prediction', detail: 'Fragrance family \u00b7 notes \u00b7 similar perfumes' },
   ],
+  references: [
+    'C. S. Sell, The Chemistry of Fragrances: From Perfumer to Consumer, 2nd ed., Quest International, Irvine, California, USA, 2006.',
+    'Kandhasamy Sowndhararajan and Songmun Kim, \u201cInfluence of Fragrances on Human Psychophysiological Activity: With Special Reference to Human Electroencephalographic Response.\u201d',
+    'Karen Rose, Scott Eldridge and Lyman Chapin, \u201cThe Internet of Things: An Overview,\u201d The Internet Society, 2015.',
+    'Feinberg, Sheffler, Meoli and Rummel, \u201cThere\u2019s Something Social Happening at the Mall,\u201d Journal of Business and Psychology, Vol. 4, No. 1, pp. 49\u201363, 1989.',
+    '\u201cIoT Based Fragrance Tester,\u201d Blue Eyes Intelligence Engineering & Sciences Publication, DOI: 10.35940/IJITEE.A1057.1191S19, 2019.',
+    'Lotz, Sherry L., Mary Ann Eastlick and Soyeon Shim, \u201cModeling Patrons\u2019 Activities at Entertainment Malls: A Study in Flow,\u201d AMA Educators\u2019 Proceedings, Vol. 11, pp. 256\u2013257, 2000.',
+    'Sonal Kureshi, Vandana Sood and Abraham Koshy, \u201cComprehensive Analysis of Exclusive Brand Store Customer in Indian Market,\u201d Indian Institute of Management Ahmedabad, Working Papers, 2007.',
+    'Gangadharaiah D. N., H. N. Ramesh and Y. N. Nagaraju, \u201cRetailing Behavior of Rural and Urban Consumers Towards Organized and Unorganized Retail Outlets,\u201d International Journal of Physical and Social Sciences, Vol. 2, No. 6, pp. 496\u2013506, 2012.',
+    'William D. Wells and Douglas J. Tigert, \u201cActivities, Interests and Opinions,\u201d Journal of Advertising Research, Vol. 11, Issue 4, pp. 27\u201335, 1971.',
+    'Poonam Kamboj and Surender Kumar Gupta, \u201cIndian Retail Industry: Its Growth, Opportunities and Challenges,\u201d International Journal of Research in IT & Management, Vol. 2, No. 10, 2012.',
+    'Woodruffe-Burton H., S. Eccles and R. Elliott, \u201cTowards a Theory of Shopping: A Holistic Framework,\u201d Journal of Consumer Behaviour, pp. 256\u2013266, 2002.',
+    'Zanual Bashar Bhutoo, Rambalak Yadav and Vikram Singh, \u201cConsumer Perception of Retail Outlets: A Comparative Study of Big Bazaar and More Mega Stores,\u201d IJNPME Journal, Issue 1, 2012.',
+    'Jeremy Blum, Exploring Arduino: Tools and Techniques for Engineering Wizardry, John Wiley & Sons, 2013.',
+    'J. M. Hughes, Arduino: A Technical Reference, O\u2019Reilly, 2016.',
+    'Java Virtual Machine Tool Interface Specification. Available: http://java.sun.com/javase/6/docs/platform/jvmti/jvmti.html',
+  ],
+  acknowledgments: {
+    intro:
+      'The authors sincerely express their gratitude to the faculty members of the Department of Artificial Intelligence and Machine Learning, R.M.D. Engineering College, for their continuous guidance and encouragement throughout this work.',
+    people: [
+      'Dr. C. S. Anita \u2014 HoD & Professor (Machine Learning)',
+      'Mrs. S. Swetha \u2014 Assistant Professor (ML, Gen AI)',
+      'Mr. N. Sathish Kumar \u2014 Assistant Professor (AI, Analytics)',
+      'Mrs. K. Gayathri Devi \u2014 Assistant Professor (Java)',
+      'Mrs. Remya Rose S \u2014 Assistant Professor (DBMS)',
+      'Mrs. E. Nalina \u2014 Assistant Professor (React)',
+      'Mrs. Monisha \u2014 Assistant Professor (Deep Learning)',
+    ],
+  },
 };
 
-export const RESEARCH_SECTIONS = [
-  {
-    id: 'abstract',
-    title: 'Abstract',
-    body:
-      'Fragrance analysis traditionally depends on costly chromatographic instrumentation. This work investigates whether compact spectroscopic sensing combined with machine learning can detect, classify and generate fragrance profiles from optical absorbance data. An ESP32-class IoT controller captures spectral signatures, which are preprocessed and passed to a 1D convolutional neural network. The model classifies samples into five fragrance families and, together with top/middle/base-note structure, supports an AI generation stage for composing new scent profiles.',
-  },
+export const RESEARCH_SECTIONS: ResearchSectionData[] = [
   {
     id: 'introduction',
     title: 'Introduction',
-    body:
-      'The sense of smell is one of the most complex human senses to replicate computationally. Fragrance consists of volatile molecules whose absorption of light follows the Beer\u2013Lambert law, producing a spectral \u201coptical fingerprint\u201d unique to each molecular structure. Advances in low-cost spectroscopy, edge IoT hardware and deep learning make it feasible to build an automated system that sees a fragrance\u2019s spectrum and reasons about its character \u2014 opening applications in quality control, perfumery, assistive technology and education.',
+    blocks: [
+      { type: 'p', text: 'Let us think about a simple question. When we smell a perfume, how do we actually know what is inside it? Humans can only guess based on experience, but machines require measurable data. Traditional fragrance analysis relies on laboratory techniques such as Gas Chromatography (GC) and Mass Spectrometry (MS). Although these methods provide highly accurate chemical analysis, they are expensive, time-consuming, and unsuitable for portable real-time applications.' },
+      { type: 'p', text: 'The objective of this research is to develop an AI-IoT based intelligent fragrance analysis system capable of detecting fragrance compounds without requiring a complete laboratory setup. Instead of performing direct chemical analysis, the proposed system uses spectroscopy to obtain the optical characteristics of a fragrance sample. These spectral characteristics are then converted into numerical data suitable for Artificial Intelligence models.' },
+      { type: 'p', text: 'The proposed system performs three major functions:' },
+      { type: 'list', items: ['Detect fragrance from a liquid perfume sample.', 'Predict fragrance notes and probable ingredients using Machine Learning.', 'Generate customized fragrance compositions according to user-selected notes.'] },
+      { type: 'p', text: 'Unlike conventional perfume testing, the proposed approach integrates spectroscopy, Artificial Intelligence, and IoT technologies to build a portable and intelligent fragrance analysis platform suitable for future smart perfumery applications.' },
+    ],
+  },
+  {
+    id: 'related-work',
+    title: 'Related Work',
+    blocks: [
+      { type: 'p', text: 'Several research works have focused on fragrance analysis using different sensing technologies.' },
+      { type: 'p', text: 'Traditional analytical systems primarily employ Gas Chromatography (GC) and Mass Spectrometry (MS), which provide highly accurate chemical identification. However, these methods require sophisticated laboratory infrastructure, trained professionals, and significant processing time.' },
+      { type: 'p', text: 'Electronic Nose (E-Nose) systems have also been proposed for odor recognition. These systems generally use arrays of gas sensors to detect Volatile Organic Compounds (VOCs). Although portable, sensor drift, environmental interference, and limited selectivity often reduce their reliability.' },
+      { type: 'p', text: 'Recent Artificial Intelligence research attempts to predict fragrance characteristics directly from molecular structures. While these methods achieve promising results, they depend on pre-existing molecular information and cannot directly analyze an unknown perfume sample.' },
+      { type: 'p', text: 'The comparison between existing approaches is summarized below.' },
+      { type: 'table', caption: 'Table 1: Comparison of Existing Fragrance Analysis Methods', headers: ['Method', 'Accuracy', 'Real-Time'], rows: [['Gas Chromatography', 'High', 'No'], ['Mass Spectrometry', 'Very High', 'No'], ['Electronic Nose', 'Moderate', 'Yes'], ['AI Molecular Prediction', 'High', 'Limited'], ['Proposed AI-IoT Spectroscopy', 'High', 'Yes']] },
+      { type: 'p', text: 'The proposed research combines the advantages of spectroscopy, IoT sensing, and Artificial Intelligence. Spectroscopy provides richer information than conventional gas sensors, while Machine Learning enables intelligent prediction of fragrance notes and ingredient estimation. IoT connectivity further enables real-time monitoring and remote fragrance analysis. This integrated approach aims to overcome the limitations of existing fragrance analysis techniques by providing a portable, intelligent, and scalable solution.' },
+    ],
   },
   {
     id: 'methodology',
     title: 'Proposed Methodology',
-    body:
-      'A fragrance droplet is placed on a spectroscopic sensor. Light passes through the sample and the resulting absorption spectrum is recorded. The signal is preprocessed (denoising, normalization, baseline correction) before feature extraction. A 1D convolutional neural network learns to map spectral features to fragrance families. Separately, the top-note / middle-note / base-note profile is modeled so that the generation stage can compose balanced mixtures, represented as a weighted sum of spectral signatures: S_total = \u03a3 w\u1d62S\u1d62.',
+    blocks: [
+      { type: 'p', text: 'The proposed AI-IoT based fragrance analysis system consists of five major stages. The workflow begins with fragrance sample acquisition and ends with fragrance prediction and generation.' },
+      { type: 'p', text: 'Step 1 \u2014 Fragrance Sample Collection: A small droplet of perfume is placed on a transparent testing substrate. The sample acts as the input for spectroscopic analysis.' },
+      { type: 'p', text: 'Step 2 \u2014 Spectroscopic Analysis: A spectroscopic sensor illuminates the fragrance sample using a controlled light source. Different chemical compounds absorb, transmit, and reflect light at different wavelengths. The resulting spectrum represents the optical fingerprint of the perfume.' },
+      { type: 'p', text: 'Step 3 \u2014 Data Acquisition: The spectral response is converted into numerical values through an Analog-to-Digital Converter (ADC). These values are transmitted to the processing unit through an IoT-enabled microcontroller such as ESP32 or Raspberry Pi.' },
+      { type: 'p', text: 'Step 4 \u2014 Artificial Intelligence Analysis: The processed spectral data is supplied to a trained Machine Learning model. The AI model compares the unknown spectrum with previously learned fragrance datasets and predicts the dominant fragrance family, top notes, middle notes, base notes, and possible chemical ingredients. Deep learning models such as Convolutional Neural Networks (CNNs) are suitable for identifying hidden spectral patterns and improving classification accuracy.' },
+      { type: 'p', text: 'Step 5 \u2014 Fragrance Generation: The proposed system also allows users to create personalized perfumes. Users can select desired fragrance characteristics such as Floral, Citrus, Woody, Oriental, Fruity, or Fresh notes. Based on learned fragrance compositions, the AI model recommends an estimated ingredient combination capable of producing a similar fragrance profile.' },
+      { type: 'p', text: 'The overall architecture of the proposed system is illustrated below.' },
+      { type: 'list', items: ['Fragrance Sample', 'Spectroscopic Sensor', 'Signal Processing', 'IoT Controller (ESP32 / Raspberry Pi)', 'Machine Learning Model', 'Prediction of Fragrance Family \u00b7 Notes \u00b7 Ingredients \u00b7 Similar Perfumes', 'AI-Based Fragrance Generation'] },
+    ],
+  },
+  {
+    id: 'physics',
+    title: 'Physics of Spectroscopy',
+    blocks: [
+      { type: 'p', text: 'Spectroscopy is based on the interaction between electromagnetic radiation and matter. Every chemical compound absorbs specific wavelengths of light depending on its molecular energy levels.' },
+      { type: 'p', text: 'According to Planck\u2019s quantum theory,' },
+      { type: 'equations', items: [{ label: 'Equation (1) \u2014 Planck', equation: 'E = h\u03bd' }] },
+      { type: 'p', text: 'where E is the energy in joules, h is Planck\u2019s constant, and \u03bd is the frequency of light. Different perfume molecules absorb different frequencies of light. Consequently, every fragrance produces a unique absorption spectrum that serves as its optical signature.' },
+      { type: 'p', text: 'The Beer-Lambert Law describes the attenuation of light passing through a fragrance sample:' },
+      { type: 'equations', items: [{ label: 'Equation (2) \u2014 Beer\u2013Lambert', equation: 'A = \u03b5cl' }] },
+      { type: 'p', text: 'where A is absorbance, \u03b5 is molar absorptivity, c is concentration, and l is the optical path length. This principle enables the spectroscopic sensor to estimate the chemical composition of the fragrance.' },
+    ],
+  },
+  {
+    id: 'chemistry',
+    title: 'Chemistry of Fragrance',
+    blocks: [
+      { type: 'p', text: 'Perfumes consist of mixtures of volatile organic compounds (VOCs). These compounds evaporate at different rates, producing different fragrance stages.' },
+      { type: 'p', text: 'Top notes are perceived immediately after perfume application. They are highly volatile and generally disappear within a few minutes. Examples include Lemon, Orange, Bergamot, and Mint.' },
+      { type: 'p', text: 'Middle notes form the main body of the fragrance after the evaporation of top notes. Examples include Rose, Jasmine, Lavender, and Cinnamon.' },
+      { type: 'p', text: 'Base notes remain for the longest duration and determine the lasting impression of the perfume. Examples include Sandalwood, Musk, Vanilla, and Amber.' },
+      { type: 'p', text: 'The combined fragrance response can be represented mathematically as' },
+      { type: 'equations', items: [{ label: 'Equation (3) \u2014 Spectral mixture', equation: 'S_total = \u03a3 w\u1d62S\u1d62' }] },
+      { type: 'p', text: 'where S\u1d62 is the spectral response of each compound and w\u1d62 is the relative concentration (weight). Since several compounds overlap within the measured spectrum, Artificial Intelligence is employed to identify hidden relationships and accurately predict fragrance characteristics.' },
+    ],
+  },
+  {
+    id: 'machine-learning',
+    title: 'Machine Learning Approach',
+    blocks: [
+      { type: 'p', text: 'Artificial Intelligence acts as the decision-making component of the proposed system. The captured spectroscopic data is converted into feature vectors before being supplied to the Machine Learning model.' },
+      { type: 'p', text: 'Let X = [x\u2081, x\u2082, x\u2083, \u2026, x\u2099] represent the extracted spectral feature vector. The prediction function is given by' },
+      { type: 'equations', items: [{ label: 'Equation (4) \u2014 Prediction function', equation: 'y = f(X)' }] },
+      { type: 'p', text: 'where X is the spectral feature vector, y is the predicted fragrance class, and f(\u00b7) is the Machine Learning model.' },
+      { type: 'p', text: 'The proposed system may employ one or more of the following models: Convolutional Neural Network (CNN), Random Forest Classifier, Support Vector Machine (SVM), Artificial Neural Network (ANN), or Gradient Boosting Algorithms. Among these, CNNs are particularly suitable because spectroscopic graphs exhibit local patterns similar to images.' },
+      { type: 'p', text: 'The training process consists of:' },
+      { type: 'list', items: ['Collection of known perfume spectra', 'Data preprocessing', 'Feature extraction', 'Model training', 'Performance evaluation', 'Prediction of unknown samples'] },
+      { type: 'p', text: 'The generated output includes the fragrance family, top notes, middle notes, base notes, estimated ingredients, and similar commercial perfumes.' },
+    ],
+  },
+  {
+    id: 'iot-integration',
+    title: 'IoT Integration',
+    blocks: [
+      { type: 'p', text: 'The Internet of Things (IoT) enables communication between the sensing device and cloud-based Artificial Intelligence services.' },
+      { type: 'p', text: 'The proposed hardware architecture consists of a Spectroscopic Sensor, ESP32 / Raspberry Pi, ADC Module, Wi-Fi Communication Module, Cloud AI Server, and User Mobile Application.' },
+      { type: 'p', text: 'The IoT workflow is summarized below.' },
+      { type: 'list', items: ['Fragrance Sample', 'Spectroscopic Sensor', 'ESP32 / Raspberry Pi', 'Wi-Fi / Internet', 'Cloud Database', 'Machine Learning Model', 'Prediction Results'] },
+      { type: 'p', text: 'IoT communication enables real-time monitoring, remote fragrance analysis, cloud-based model updates, and centralized dataset storage.' },
+    ],
   },
   {
     id: 'results',
-    title: 'Results & Analysis',
-    body:
-      'Preliminary results show strong separation between fragrance families, with per-sample classification confidence between 93.5% and 96.8% on the current dataset. The absorption fingerprint approach performs best on Woody and Fruity families, which present more distinct spectral envelopes. Remaining challenges include sensor drift over time, ambient lighting variation and the need for more independent samples to validate generalization.',
+    title: 'Results and Analysis',
+    blocks: [
+      { type: 'p', text: 'A prototype implementation was evaluated using multiple fragrance samples representing different perfume families.' },
+      { type: 'p', text: 'The Artificial Intelligence model successfully classified fragrances into their respective categories and identified dominant fragrance notes.' },
+      { type: 'p', text: 'The following table summarizes representative prediction results.' },
+      { type: 'table', caption: 'Table 2: Sample Prediction Results', headers: ['Sample', 'Predicted Family', 'Confidence (%)'], rows: [['Perfume A', 'Citrus', '95.4'], ['Perfume B', 'Floral', '94.2'], ['Perfume C', 'Woody', '96.8'], ['Perfume D', 'Oriental', '93.5'], ['Perfume E', 'Fruity', '95.9']] },
+      { type: 'p', text: 'The prototype demonstrates that combining spectroscopy with Machine Learning can effectively identify fragrance families while maintaining rapid prediction performance.' },
+    ],
   },
   {
-    id: 'future',
+    id: 'discussion',
+    title: 'Discussion',
+    blocks: [
+      { type: 'p', text: 'The proposed AI-IoT fragrance analysis system offers several advantages over traditional laboratory techniques.' },
+      { type: 'list', heading: 'Advantages', items: ['Portable fragrance analysis', 'Real-time prediction', 'AI-assisted learning capability', 'Lower operational cost', 'Remote IoT connectivity', 'Counterfeit perfume detection', 'Personalized fragrance generation'] },
+      { type: 'list', heading: 'Limitations', items: ['Performance depends on sensor quality.', 'Mixed fragrance compositions remain challenging.', 'Large labelled spectral datasets are required.', 'Environmental temperature and humidity may influence measurements.'] },
+      { type: 'p', text: 'Future improvements may include Deep Learning models, transformer-based architectures, and larger fragrance datasets for improved prediction accuracy.' },
+    ],
+  },
+  {
+    id: 'future-scope',
     title: 'Future Scope',
-    body:
-      'Planned work includes expanding the dataset with independent samples, adding drift-compensation calibration, comparing the 1D CNN against spectral transformer baselines, and deploying the pipeline to a portable IoT device with on-device inference. The ultimate goal is a complete fragrance analysis-and-generation instrument that is both affordable and reproducible.',
+    blocks: [
+      { type: 'list', items: ['Integration with robotic perfume manufacturing.', 'AI-based perfume recommendation systems.', 'Mobile fragrance scanning applications.', 'Healthcare applications involving aroma therapy.', 'Counterfeit perfume verification.', 'Smart retail perfume recommendation.', 'Cloud-based fragrance database development.'] },
+      { type: 'p', text: 'The combination of spectroscopy, Artificial Intelligence, and IoT provides significant opportunities for future intelligent fragrance technologies.' },
+    ],
+  },
+  {
+    id: 'conclusion',
+    title: 'Conclusion',
+    blocks: [
+      { type: 'p', text: 'This paper presented an AI-IoT based fragrance detection, analysis, and generation system using spectroscopic learning. Unlike traditional laboratory techniques, the proposed approach combines spectroscopy, Internet of Things devices, and Artificial Intelligence to create a portable, intelligent, and scalable fragrance analysis platform.' },
+      { type: 'p', text: 'Experimental evaluation indicates that Machine Learning models can successfully classify fragrance families and estimate perfume notes from spectroscopic data. Furthermore, the proposed fragrance generation module enables personalized perfume design based on learned fragrance compositions.' },
+      { type: 'p', text: 'The proposed system demonstrates the feasibility of intelligent fragrance sensing and provides a strong foundation for future research in smart perfumery, chemical sensing, and AI-driven fragrance engineering.' },
+    ],
   },
 ];
-
-/* ------------------------------------------------------------------ */
-/*  EXPERIENCE                                                         */
-/* ------------------------------------------------------------------ */
 
 export const EXPERIENCE: ExperienceItem[] = [
   {
