@@ -10,7 +10,7 @@ interface FooterProps {
 export const Footer: React.FC<FooterProps> = ({ onOpenTerminal }) => {
   const year = new Date().getFullYear();
   return (
-    <footer className="relative mt-24 border-t border-line">
+    <footer className="relative mt-24 border-t border-[#A58D68]/40">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
         <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
           <div>
@@ -20,7 +20,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenTerminal }) => {
             </p>
             <button
               onClick={onOpenTerminal}
-              className="mt-3 font-mono text-[11px] text-accent-blue underline-offset-4 hover:underline"
+              className="mt-3 font-mono text-[11px] text-accent-gold underline-offset-4 hover:underline"
             >
               $ try my terminal →
             </button>
@@ -39,7 +39,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenTerminal }) => {
                 target={href.startsWith('http') ? '_blank' : undefined}
                 rel="noreferrer"
                 aria-label={label}
-                className="flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-white/60 text-muted transition-all duration-300 hover:-translate-y-0.5 hover:border-accent-blue/40 hover:text-accent-blue"
+                className="wood-chip flex h-10 w-10 items-center justify-center rounded-xl text-muted transition-all duration-300 hover:-translate-y-0.5 hover:border-accent-gold/60 hover:text-accent-gold"
               >
                 <Icon className="h-4 w-4" />
               </a>
@@ -47,15 +47,15 @@ export const Footer: React.FC<FooterProps> = ({ onOpenTerminal }) => {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-line pt-6 sm:flex-row sm:items-center">
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+        <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-[#A58D68]/40 pt-6 sm:flex-row sm:items-center">
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
             {'©'} {year} Datta Srinikesh Chinta {'·'} Building intelligence, not just software
           </p>
-          <div className="flex flex-wrap items-center gap-4 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
-            <Link to="/projects" className="hover:text-accent-blue">02 Projects</Link>
-            <Link to="/building" className="hover:text-accent-blue">Building</Link>
-            <Link to="/research" className="hover:text-accent-blue">Research</Link>
-            <Link to="/music" className="hover:text-accent-blue">Music</Link>
+          <div className="flex flex-wrap items-center gap-4 font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
+            <Link to="/projects" className="hover:text-accent-gold">02 Projects</Link>
+            <Link to="/building" className="hover:text-accent-gold">Building</Link>
+            <Link to="/research" className="hover:text-accent-gold">Research</Link>
+            <Link to="/music" className="hover:text-accent-gold">Music</Link>
           </div>
         </div>
       </div>

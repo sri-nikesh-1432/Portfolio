@@ -3,21 +3,21 @@
 @tailwind utilities;
 
 :root {
-  --bg-canvas: #f6f7fb;
-  --bg-ivory: #faf8f3;
-  --bg-paper: #fdfbf7;
-  --ink: #0e1526;
-  --ink-soft: #2a3550;
-  --muted: #5a6b85;
-  --faint: #8b97ad;
-  --accent-blue: #4c8dff;
-  --accent-teal: #2bb6a7;
-  --accent-lavender: #8b7cf6;
+  --bg-canvas: #ede2ce;
+  --bg-ivory: #f4ebdc;
+  --bg-paper: #faf3e4;
+  --ink: #33220f;
+  --ink-soft: #4e3a22;
+  --muted: #7c6443;
+  --faint: #a58d68;
+  --accent-blue: #b0893f;
+  --accent-teal: #8c6a38;
+  --accent-lavender: #8c3a2b;
   --accent-gold: #c9a24b;
-  --accent-red: #c5221f;
-  --status-green: #2e9e6b;
-  --status-amber: #c77d2e;
-  --border-line: rgba(14, 21, 38, 0.08);
+  --accent-red: #9e2b20;
+  --status-green: #5e8c4a;
+  --status-amber: #b06e2e;
+  --border-line: rgba(51, 34, 15, 0.14);
 }
 
 html {
@@ -41,40 +41,155 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #c9d3e3;
+  background: #c3a878;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-blue);
+  background: var(--accent-gold);
 }
 
-/* ---------- Glass panels ---------- */
+/* ---------- Wood grain background (page atmosphere) ---------- */
+.bg-grain {
+  background-image:
+    repeating-linear-gradient(94deg, rgba(122, 85, 46, 0.05) 0 2px, transparent 2px 9px),
+    repeating-linear-gradient(86deg, rgba(255, 252, 244, 0.06) 0 1px, transparent 1px 5px);
+}
+
+/* ---------- Wooden card (light oak) ---------- */
+.wood-card {
+  background-color: #e4d2b2;
+  background-image:
+    repeating-linear-gradient(93deg, rgba(122, 85, 46, 0.055) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(87deg, rgba(255, 252, 244, 0.06) 0 1px, transparent 1px 4px);
+  border: 1px solid rgba(122, 85, 46, 0.32);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -3px 8px rgba(122, 85, 46, 0.16),
+    0 14px 34px -12px rgba(90, 60, 25, 0.28);
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.wood-card-hover:hover {
+  transform: translateY(-4px);
+  border-color: rgba(176, 137, 63, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 24px 48px -14px rgba(90, 60, 25, 0.4),
+    0 0 0 1px rgba(176, 137, 63, 0.2);
+}
+
+/* ---------- Dark walnut plank (nav, signboards) ---------- */
+.wood-plank {
+  background-color: #3e2a14;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0 2px, transparent 2px 18px),
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 5px),
+    linear-gradient(180deg, #4a341c, #33220f);
+  border: 1px solid rgba(224, 188, 106, 0.28);
+  box-shadow:
+    0 10px 30px -12px rgba(40, 22, 6, 0.5),
+    inset 0 1px 0 rgba(255, 220, 170, 0.14);
+}
+
+/* ---------- Hanging wooden sign (quote block) ---------- */
+.wood-sign {
+  background-color: #4e3519;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.18) 0 2px, transparent 2px 12px),
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px 5px);
+  border: 1px solid rgba(224, 188, 106, 0.35);
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, 0.4),
+    0 12px 28px -10px rgba(46, 26, 8, 0.5);
+}
+
+/* ---------- Wooden picture frame ---------- */
+.wood-frame {
+  background-color: #5c3d24;
+  background-image:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.14) 0 2px, transparent 2px 16px),
+    linear-gradient(160deg, #7a5536, #5c3d24 55%, #462d17);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 220, 170, 0.18),
+    inset 0 0 0 4px #6e4a2c,
+    inset 0 0 0 5px rgba(0, 0, 0, 0.35),
+    0 30px 70px -18px rgba(46, 26, 8, 0.55);
+}
+
+/* ---------- Small wooden chip (module icons, tags) ---------- */
+.wood-chip {
+  background-color: #dcc7a3;
+  background-image: repeating-linear-gradient(94deg, rgba(122, 85, 46, 0.05) 0 1px, transparent 1px 4px);
+  border: 1px solid rgba(122, 85, 46, 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 2px 6px rgba(90, 60, 25, 0.18);
+}
+
+/* ---------- Brass stud / screw ---------- */
+.brass-stud {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 35% 30%, #f0d08a, #b0893f 45%, #7a5a20 90%);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+}
+
+/* ---------- Brass button gradient ---------- */
+.brass {
+  background: linear-gradient(180deg, #e0bc6a 0%, #c49a3d 45%, #a87b26 100%);
+  color: #3a2a10;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 4px 12px rgba(122, 88, 30, 0.35);
+}
+
+/* ---------- Engraved brass text ---------- */
+.brass-text {
+  background: linear-gradient(115deg, #9a6f2a 0%, #dfb957 28%, #f4d98e 50%, #c2953b 72%, #9a6f2a 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.22)) drop-shadow(0 2px 2px rgba(60, 35, 8, 0.28));
+  animation: shimmer 7s linear infinite;
+}
+
+/* ---------- Glass panels (warmed to match the wood) ---------- */
 .glass {
-  background: rgba(255, 255, 255, 0.62);
-  backdrop-filter: blur(18px) saturate(1.4);
-  -webkit-backdrop-filter: blur(18px) saturate(1.4);
-  border: 1px solid rgba(255, 255, 255, 0.75);
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  background: rgba(255, 251, 242, 0.66);
+  backdrop-filter: blur(18px) saturate(1.3);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  border: 1px solid rgba(176, 137, 63, 0.22);
+  box-shadow:
+    0 8px 32px rgba(96, 64, 26, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
   transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .glass-soft {
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(12px) saturate(1.3);
-  -webkit-backdrop-filter: blur(12px) saturate(1.3);
-  border: 1px solid rgba(255, 255, 255, 0.65);
+  background: rgba(255, 251, 242, 0.5);
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  border: 1px solid rgba(176, 137, 63, 0.18);
   transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .glass-hover:hover {
-  border-color: rgba(76, 141, 255, 0.4);
-  box-shadow: 0 20px 48px rgba(76, 141, 255, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border-color: rgba(176, 137, 63, 0.5);
+  box-shadow:
+    0 20px 48px rgba(122, 88, 30, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
   transform: translateY(-4px);
 }
 
-/* ---------- Iridescent / holographic accents ---------- */
+/* ---------- Brass shimmer (replaces holo accents) ---------- */
 .holo-text {
-  background: linear-gradient(110deg, #4c8dff 0%, #8b7cf6 35%, #2bb6a7 70%, #4c8dff 100%);
+  background: linear-gradient(110deg, #a97c2e 0%, #e3bc6e 25%, #b06e3c 50%, #d9b45c 75%, #a97c2e 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -91,7 +206,13 @@ body {
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(135deg, rgba(76, 141, 255, 0.55), rgba(139, 124, 246, 0.35), rgba(43, 182, 167, 0.5), rgba(201, 162, 75, 0.4));
+  background: linear-gradient(
+    135deg,
+    rgba(176, 137, 63, 0.7),
+    rgba(140, 58, 43, 0.4),
+    rgba(140, 106, 56, 0.6),
+    rgba(201, 162, 75, 0.6)
+  );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -133,8 +254,8 @@ body {
   box-shadow: 2px 3px 6px rgba(197, 34, 31, 0.22);
   background: rgba(197, 34, 31, 0.05);
   user-select: none;
-  -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,0.82) 58%, rgba(0,0,0,0.35) 100%);
-  mask-image: radial-gradient(circle, rgba(0,0,0,0.82) 58%, rgba(0,0,0,0.35) 100%);
+  -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 0.82) 58%, rgba(0, 0, 0, 0.35) 100%);
+  mask-image: radial-gradient(circle, rgba(0, 0, 0, 0.82) 58%, rgba(0, 0, 0, 0.35) 100%);
 }
 
 .stamp-heavy {
@@ -143,7 +264,7 @@ body {
   font-size: 0.8rem;
   letter-spacing: 0.16em;
   box-shadow: 3px 4px 8px rgba(197, 34, 31, 0.3);
-  background: linear-gradient(100deg, rgba(197,34,31,0.08), rgba(197,34,31,0.02));
+  background: linear-gradient(100deg, rgba(197, 34, 31, 0.08), rgba(197, 34, 31, 0.02));
 }
 
 /* ---------- Notebook paper ---------- */
@@ -167,7 +288,7 @@ body {
   background: rgba(255, 255, 255, 0.15);
 }
 .term-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(76, 141, 255, 0.6);
+  background: rgba(201, 162, 75, 0.6);
 }
 
 /* ---------- Utility ---------- */
@@ -176,12 +297,12 @@ body {
 }
 
 .hairline {
-  background: linear-gradient(90deg, transparent, rgba(14, 21, 38, 0.14), transparent);
+  background: linear-gradient(90deg, transparent, rgba(51, 34, 15, 0.16), transparent);
   height: 1px;
 }
 
 .dot-grid {
-  background-image: radial-gradient(rgba(14, 21, 38, 0.07) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(51, 34, 15, 0.08) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 
