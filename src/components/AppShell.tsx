@@ -44,7 +44,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
 
       <Navbar onOpenTerminal={openTerminal} />
 
-      <main className="mx-auto max-w-7xl px-4 pt-24 pb-8 sm:px-6 lg:pt-40">{children}</main>
+      <main className="mx-auto max-w-7xl px-4 pt-24 pb-8 sm:px-6">{children}</main>
 
       <Footer onOpenTerminal={openTerminal} />
 

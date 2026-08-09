@@ -42,13 +42,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTerminal }) => {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-40 px-3 transition-all duration-500 sm:px-4 ${
-        scrolled ? 'py-1.5' : 'py-2.5'
+      className={`fixed inset-x-0 top-0 z-40 transition-all duration-500 ${
+        scrolled ? 'py-2' : 'py-4'
       }`}
     >
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <nav
-          className={`wood-plank-floating rounded-2xl px-4 py-2.5 transition-shadow duration-500 sm:px-5 ${
+          className={`wood-plank rounded-2xl px-4 py-3 transition-shadow duration-500 sm:px-5 ${
             scrolled ? 'shadow-lift' : ''
           }`}
         >
@@ -90,7 +90,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTerminal }) => {
           </div>
 
           {/* Row 2 — full navigation strip (desktop) */}
-          <div className="mt-2.5 hidden flex-wrap items-center gap-x-0.5 gap-y-1 border-t border-[#C9A24B]/25 pt-2 lg:flex">
+          <div className="mt-3 hidden flex-wrap items-center gap-x-0.5 gap-y-1 border-t border-[#C9A24B]/25 pt-2.5 lg:flex">
             {LINKS.map((link) => (
               <NavLink
                 key={link.to}
@@ -112,7 +112,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTerminal }) => {
 
           {/* Mobile menu */}
           {mobileOpen && (
-            <div className="mt-2.5 grid grid-cols-2 gap-1 border-t border-[#C9A24B]/25 pt-2.5 lg:hidden">
+            <div className="mt-3 grid grid-cols-2 gap-1 border-t border-[#C9A24B]/25 pt-3 lg:hidden">
               {LINKS.map((link) => (
                 <NavLink
                   key={link.to}

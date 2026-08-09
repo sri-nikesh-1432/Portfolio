@@ -4,12 +4,15 @@ import {
   ArrowRight,
   ArrowUpRight,
   Cpu,
+  Ear,
+  Eye,
   FileText,
   FlaskConical,
+  Languages,
   Lightbulb,
-  Package,
+  Mic,
   Sparkles,
-  Upload,
+  TerminalSquare,
   Workflow,
 } from 'lucide-react';
 import { Reveal } from '../components/Reveal';
@@ -27,18 +30,12 @@ import {
   RESEARCH,
 } from '../data/portfolioData';
 
-/* System blueprint — from raw input to shipped product */
-const BLUEPRINT = [
-  { label: 'Input', icon: Upload },
-  { label: 'Intelligence', icon: Sparkles },
-  { label: 'Reasoning', icon: Workflow },
-  { label: 'System', icon: Cpu },
-  { label: 'Product', icon: Package },
+const HERO_MODULES = [
+  { icon: Mic, label: 'Voice AI', detail: 'STT → LLM → TTS' },
+  { icon: Workflow, label: 'RAG', detail: 'Chunk · Embed · Retrieve' },
+  { icon: Cpu, label: 'AI Agents', detail: 'Orchestration & automation' },
+  { icon: Eye, label: 'Vision', detail: 'Detection & classification' },
 ];
-
-const PIPELINES = ['Voice AI', 'RAG', 'Agents', 'ML', 'Automation'];
-
-const BUILDING_NOW = ['AI Products', 'SaaS Systems', 'Voice Interfaces', 'Intelligent Agents'];
 
 export const Home: React.FC = () => {
   const [resumeOpen, setResumeOpen] = useState(false);
@@ -46,53 +43,104 @@ export const Home: React.FC = () => {
 
   return (
     <div className="space-y-28 md:space-y-36">
-      {/* ---------------- HERO / ABOUT — full-viewport composition ---------------- */}
-      <section className="flex min-h-[calc(100dvh_-_6rem)] flex-col justify-center pt-6 md:pt-8 lg:min-h-[calc(100dvh_-_10rem)]">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:gap-14">
-          {/* LEFT — identity + statement */}
+      {/* ---------------- ABOUT / IDENTITY ---------------- */}
+      <section>
+        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+          <SectionHeading
+            eyebrow="About"
+            title={<>Building intelligence, not just software.</>}
+            description=""
+          />
+          <Reveal delay={120}>
+            <div className="space-y-5 text-[15px] leading-relaxed text-inkSoft">
+              <p>
+                I'm <span className="font-medium text-ink">{PERSONAL.name}</span> — an AI/ML engineer
+                and builder focused on creating intelligent systems that combine machine learning,
+                generative AI, voice interfaces, retrieval-augmented generation, computer vision and
+                autonomous agents.
+              </p>
+              <p>
+                My work spans multilingual conversational systems, AI telecalling, RAG platforms,
+                agent orchestration, biomimetic research and full-stack AI products. I'm currently a{' '}
+                <span className="font-medium text-ink">B.Tech AI & ML student at R.M.D Engineering College</span>{' '}
+                ({PERSONAL.education.period}, CGPA {PERSONAL.education.cgpa}), pursuing the goal of
+                becoming an AI Systems Engineer who ships complete products.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {PERSONAL.interests.map((i) => (
+                  <span
+                    key={i}
+                    className="wood-chip inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] text-inkSoft"
+                  >
+                    <Sparkles className="h-3 w-3 text-accent-gold" />
+                    {i}
+                  </span>
+                ))}
+              </div>
+              <div className="flex items-center gap-3 pt-2">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-accent-gold to-accent-copper text-white">
+                  <Languages className="h-4 w-4" />
+                </span>
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-accent-copper to-accent-rosewood text-white">
+                  <Ear className="h-4 w-4" />
+                </span>
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-accent-gold to-accent-red text-white">
+                  <TerminalSquare className="h-4 w-4" />
+                </span>
+                <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-faint">
+                  voice · agents · systems
+                </span>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ---------------- HERO ---------------- */}
+      <section className="relative pt-6 md:pt-12">
+        <div className="grid items-center gap-14 lg:grid-cols-[1.15fr_0.85fr]">
           <div>
             <Reveal>
               <p className="eyebrow flex items-center gap-2 text-[#8A5A2B]">
                 <span className="inline-block h-1.5 w-1.5 animate-pulseSoft rounded-full bg-status-green" />
-                AI Systems Engineer
+                AI Systems Engineer · Hyderabad, India
               </p>
             </Reveal>
 
-            <Reveal delay={100}>
-              <h1 className="mt-5 font-display text-[2.7rem] font-medium leading-[1.05] tracking-tight text-ink md:text-[3.5rem] lg:text-[4rem]">
-                Building <span className="holo-text">intelligence</span>,
-                <br />
-                not just software.
+            <Reveal delay={120}>
+              <h1 className="mt-6 font-display text-[2.9rem] font-medium leading-[1.04] tracking-tight text-ink md:text-[4.2rem]">
+                I build intelligent systems that can{' '}
+                <span className="holo-text">see, speak, reason</span> and{' '}
+                <span className="relative inline-block">
+                  act
+                  <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 120 10" fill="none">
+                    <path d="M2 8C30 3 60 2 118 5" stroke="#C9A24B" strokeWidth="2.5" strokeLinecap="round" />
+                  </svg>
+                </span>
+                .
               </h1>
             </Reveal>
 
-            <Reveal delay={190}>
-              <p className="mt-6 font-display text-[19px] font-medium text-ink/90">
-                {PERSONAL.name}
+            <Reveal delay={220}>
+              <p className="mt-7 max-w-xl text-[15.5px] leading-relaxed text-muted text-balance">
+                {PERSONAL.tagline}
               </p>
             </Reveal>
 
-            <Reveal delay={260}>
-              <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-muted text-balance">
-                Designing and building end-to-end AI systems across Voice AI, Generative AI, RAG,
-                autonomous agents and intelligent software products.
-              </p>
-            </Reveal>
-
-            <Reveal delay={340}>
-              <div className="wood-sign relative mt-6 max-w-xl rounded-xl px-5 py-4">
+            <Reveal delay={320}>
+              <div className="wood-sign relative mt-5 max-w-xl rounded-xl px-5 py-4">
                 <span className="brass-stud absolute -left-[5px] -top-[5px]" />
                 <span className="brass-stud absolute -right-[5px] -top-[5px]" />
                 <span className="brass-stud absolute -bottom-[5px] -left-[5px]" />
                 <span className="brass-stud absolute -bottom-[5px] -right-[5px]" />
                 <p className="font-display text-[15px] italic text-[#F2E4C9]">
-                  &ldquo;{PERSONAL.positioning}&rdquo;
+                  "{PERSONAL.positioning}"
                 </p>
               </div>
             </Reveal>
 
             <Reveal delay={420}>
-              <div className="mt-8 flex flex-wrap items-center gap-3">
+              <div className="mt-9 flex flex-wrap items-center gap-3">
                 <Link
                   to="/projects"
                   className="holo-sheen group inline-flex items-center gap-2 rounded-xl bg-wooddark px-6 py-3.5 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-[#F4EBDC] shadow-brass transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift"
@@ -122,163 +170,69 @@ export const Home: React.FC = () => {
                 </button>
               </div>
             </Reveal>
+
+            <Reveal delay={520}>
+              <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
+                {HERO_MODULES.map((m) => (
+                  <div key={m.label} className="flex items-center gap-2.5">
+                    <span className="wood-chip flex h-8 w-8 items-center justify-center rounded-lg">
+                      <m.icon className="h-4 w-4 text-accent-gold" />
+                    </span>
+                    <span className="flex flex-col">
+                      <span className="text-[12px] font-medium text-ink">{m.label}</span>
+                      <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-muted">{m.detail}</span>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
           </div>
 
-          {/* RIGHT — portrait + system profile */}
-          <Reveal delay={240} className="relative">
-            <div className="mx-auto w-full max-w-sm">
-              {/* Portrait in wooden frame */}
-              <div className="relative">
-                <div className="absolute -inset-5 rounded-[32px] bg-gradient-to-br from-accent-gold/25 via-accent-copper/15 to-accent-rosewood/20 blur-2xl" />
-                <div className="wood-frame relative overflow-hidden rounded-3xl p-3">
-                  <span className="brass-stud absolute left-2 top-2 z-10" />
-                  <span className="brass-stud absolute right-2 top-2 z-10" />
-                  <span className="brass-stud absolute bottom-2 left-2 z-10" />
-                  <span className="brass-stud absolute bottom-2 right-2 z-10" />
-                  <div className="relative overflow-hidden rounded-2xl">
-                    <img
-                      src="/mypic.png"
-                      alt="Portrait of Datta Srinikesh Chinta"
-                      className="aspect-[3/4] w-full object-cover"
-                    />
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-wooddark/40 via-transparent to-transparent" />
-                    <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-[#F4EBDC]/90 px-3 py-1 font-mono text-[9px] uppercase tracking-[0.14em] text-status-green backdrop-blur">
-                      <span className="h-1.5 w-1.5 animate-pulseSoft rounded-full bg-status-green" />
-                      Building in public
-                    </span>
+          {/* Portrait in wooden frame */}
+          <Reveal delay={260} className="relative">
+            <div className="relative mx-auto max-w-sm">
+              <div className="absolute -inset-5 rounded-[32px] bg-gradient-to-br from-accent-gold/25 via-accent-copper/15 to-accent-rosewood/20 blur-2xl" />
+              <div className="wood-frame relative overflow-hidden rounded-3xl p-3">
+                <span className="brass-stud absolute left-2 top-2 z-10" />
+                <span className="brass-stud absolute right-2 top-2 z-10" />
+                <span className="brass-stud absolute bottom-2 left-2 z-10" />
+                <span className="brass-stud absolute bottom-2 right-2 z-10" />
+                <div className="relative overflow-hidden rounded-2xl">
+                  <img
+                    src="/mypic.png"
+                    alt="Portrait of Datta Srinikesh Chinta"
+                    className="aspect-[3/4] w-full object-cover"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-wooddark/40 via-transparent to-transparent" />
+                  <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-[#F4EBDC]/90 px-3 py-1 font-mono text-[9px] uppercase tracking-[0.14em] text-status-green backdrop-blur">
+                    <span className="h-1.5 w-1.5 animate-pulseSoft rounded-full bg-status-green" />
+                    Building in public
+                  </span>
+                </div>
+                <div className="mt-3 flex items-center justify-between gap-3 rounded-xl bg-wooddark/60 px-3 py-2.5">
+                  <div>
+                    <p className="font-display text-[16px] font-semibold leading-tight text-[#F4EBDC]">
+                      {PERSONAL.firstName}
+                    </p>
+                    <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.2em] text-accent-gold">
+                      {PERSONAL.role}
+                    </p>
                   </div>
-                  <div className="mt-3 flex items-center justify-between gap-3 rounded-xl bg-wooddark/60 px-3 py-2.5">
-                    <div>
-                      <p className="font-display text-[16px] font-semibold leading-tight text-[#F4EBDC]">
-                        {PERSONAL.firstName}
-                      </p>
-                      <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.2em] text-accent-gold">
-                        {PERSONAL.role}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[#D9C3A0]">$ whoami</p>
-                      <p className="mt-0.5 max-w-[160px] truncate text-[10px] font-medium text-[#F2E4C9]">
-                        {PERSONAL.name}
-                      </p>
-                    </div>
+                  <div className="text-right">
+                    <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[#D9C3A0]">$ whoami</p>
+                    <p className="mt-0.5 max-w-[160px] truncate text-[10px] font-medium text-[#F2E4C9]">
+                      {PERSONAL.name}
+                    </p>
                   </div>
                 </div>
-              </div>
-
-              {/* System profile card */}
-              <div className="wood-card relative mt-6 rounded-2xl p-6">
-                <span className="brass-stud absolute left-2 top-2" />
-                <span className="brass-stud absolute right-2 top-2" />
-                <span className="brass-stud absolute bottom-2 left-2" />
-                <span className="brass-stud absolute bottom-2 right-2" />
-
-                <p className="font-mono text-[9px] uppercase tracking-[0.24em] text-muted">
-                  System Profile
-                </p>
-                <p className="mt-2 font-display text-[18px] font-semibold leading-tight text-ink">
-                  {PERSONAL.name}
-                </p>
-                <p className="mt-1 font-mono text-[9.5px] uppercase tracking-[0.2em] text-accent-gold">
-                  {PERSONAL.role}
-                </p>
-
-                <div className="hairline my-4" />
-
-                <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-muted">
-                  Primary Systems
-                </p>
-                <div className="mt-3 grid grid-cols-2 gap-2">
-                  {PERSONAL.interests.map((i) => (
-                    <span
-                      key={i}
-                      className="wood-chip rounded-lg px-2.5 py-1.5 text-[10px] font-medium text-inkSoft"
-                    >
-                      {i}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="hairline my-4" />
-
-                <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-muted">
-                  Currently Building
-                </p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {BUILDING_NOW.map((b) => (
-                    <span
-                      key={b}
-                      className="rounded-lg border border-accent-gold/35 bg-accent-gold/10 px-2.5 py-1.5 text-[10px] font-medium text-accent-gold"
-                    >
-                      {b}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="hairline my-4" />
-
-                <p className="flex items-center gap-2 text-[12.5px] font-medium text-ink">
-                  <span className="h-2 w-2 animate-pulseSoft rounded-full bg-status-green" />
-                  Status: Active — building in public
-                </p>
               </div>
             </div>
           </Reveal>
         </div>
 
-        {/* Blueprint band — input → product */}
-        <Reveal delay={300}>
-          <div className="wood-plank relative mt-14 overflow-hidden rounded-2xl px-5 py-6 md:px-8">
-            <span className="brass-stud absolute left-3 top-3" />
-            <span className="brass-stud absolute right-3 top-3" />
-            <span className="brass-stud absolute bottom-3 left-3" />
-            <span className="brass-stud absolute bottom-3 right-3" />
-
-            <div className="flex flex-wrap items-center justify-center gap-x-2.5 gap-y-3">
-              {BLUEPRINT.map((stage, i) => (
-                <React.Fragment key={stage.label}>
-                  <div className="flex items-center gap-2 rounded-xl border border-[#C9A24B]/30 bg-[#C9A24B]/8 px-3 py-2">
-                    <stage.icon className="h-4 w-4 text-[#F4D98E]" />
-                    <span className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-[#E8D9BD]">
-                      {stage.label}
-                    </span>
-                  </div>
-                  {i < BLUEPRINT.length - 1 && (
-                    <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[#C9A24B]/60" />
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
-
-            <div className="mt-5 flex flex-wrap items-center justify-center gap-2 border-t border-[#C9A24B]/20 pt-4">
-              <span className="font-mono text-[8.5px] uppercase tracking-[0.2em] text-[#C9A24B]/70">
-                pipelines ·
-              </span>
-              {PIPELINES.map((p) => (
-                <span
-                  key={p}
-                  className="rounded-md border border-[#C9A24B]/25 bg-white/5 px-2.5 py-1 font-mono text-[8.5px] uppercase tracking-[0.16em] text-[#E8D9BD]"
-                >
-                  {p}
-                </span>
-              ))}
-            </div>
-          </div>
-        </Reveal>
-
-        {/* Bottom status bar */}
-        <Reveal delay={380}>
-          <div className="mt-8 flex items-center justify-center gap-2.5">
-            <span className="h-1.5 w-1.5 animate-pulseSoft rounded-full bg-status-green" />
-            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-muted">
-              AI Systems Engineer · Hyderabad, India
-            </p>
-          </div>
-        </Reveal>
-
         {/* Honest counters — wooden plaques */}
         <Reveal delay={200}>
-          <div className="mt-12 grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <div className="mt-20 grid grid-cols-2 gap-3 lg:grid-cols-4">
             {METRICS.map((m) => (
               <div
                 key={m.label}
@@ -502,6 +456,8 @@ export const Home: React.FC = () => {
           </div>
         </Reveal>
       </section>
+
+      
 
       <ResumeModal open={resumeOpen} onClose={() => setResumeOpen(false)} />
       <SuggestionModal
