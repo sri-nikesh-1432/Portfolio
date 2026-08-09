@@ -1,11 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Reveal } from '../components/Reveal';
 import { SectionHeading } from '../components/SectionHeading';
 import { SKILLS } from '../data/portfolioData';
+import { SkillEndorsement } from '../components/endorsements/SkillEndorsement';
+import { fetchAllEndorsementCounts } from '../lib/endorsementsApi';
 
 const starCount = (level: number) => level;
 
 export const Skills: React.FC = () => {
+  const [counts, setCounts] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchAllEndorsementCounts()
+      .then((data) => {
+        if (!cancelled) setCounts(data);
+      })
+      .catch(() => {
+        /* endorsement counts are optional decoration */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <div className="space-y-16">
       <SectionHeading
@@ -38,6 +56,7 @@ export const Skills: React.FC = () => {
                       </span>
                     </div>
                     <p className="mt-0.5 text-[12px] text-muted">{skill.note}</p>
+                    <SkillEndorsement skillName={skill.name} initialCount={counts[skill.name] ?? 0} />
                   </div>
                 ))}
               </div>

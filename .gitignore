@@ -4,3 +4,9 @@ dist/
 .DS_Store
 Thumbs.db
 *.local
+
+# Local endorsement data + secrets
+.data/
+.env
+.env.local
+.env.*.local
