@@ -4,6 +4,7 @@ import {
   CERTIFICATIONS,
   COMPLETED_SYSTEMS,
   EXPERIENCE,
+  MINI_PROJECTS,
   MUSIC,
   PERSONAL,
   RESEARCH,
@@ -25,19 +26,16 @@ const SOFT: [number, number, number] = [42, 53, 80];
 const MUTED: [number, number, number] = [90, 107, 133];
 const BLUE: [number, number, number] = [59, 111, 224];
 
-const SKILL_SECTIONS: { heading: string; category: string }[] = [
-  { heading: 'Programming', category: 'Programming' },
-  { heading: 'AI / ML', category: 'AI & ML' },
-  { heading: 'Frameworks', category: 'Frameworks & Stack' },
-  { heading: 'Tools / Platforms', category: 'Cloud, Models & Tools' },
-];
-
-const skillLineFor = (category: string): string => {
-  const match =
-    SKILLS.find((c) => c.category === category) ??
-    SKILLS.find((c) => c.category.toLowerCase().includes(category.toLowerCase()));
-  return match ? match.skills.map((s) => s.name).join(', ') : '';
+const CATEGORY_ORDER = ['Programming Languages', 'AI & Machine Learning', 'Data & Analytics', 'Professional & Tools'];
+const CATEGORY_LABELS: Record<string, string> = {
+  'Programming Languages': 'Programming',
+  'AI & Machine Learning': 'AI / ML',
+  'Data & Analytics': 'Data & Analytics',
+  'Professional & Tools': 'Professional & Tools',
 };
+
+const skillLineFor = (category: string): string =>
+  SKILLS.filter((s) => s.category === category).map((s) => s.name).join(', ');
 
 const shortUrl = (url: string): string => url.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
@@ -113,7 +111,7 @@ export const downloadResumePdf = (filename = 'Datta_Srinikesh_Chinta_Resume.pdf'
   /* ---------- Summary ---------- */
   section('Summary');
   write(
-    'AI / ML engineer focused on building production-oriented intelligent systems \u2014 voice AI, retrieval-augmented generation (RAG), AI agents and full-stack AI products. Experience across SaaS product development, conversational AI, multilingual voice systems and machine learning. Two completed projects shipped and deployed; several projects in active development; pre-publication research in spectroscopic AI.',
+    'AI / ML engineer focused on building production-oriented intelligent systems \u2014 voice AI, retrieval-augmented generation (RAG), AI agents and full-stack AI products. Experience across SaaS product development, conversational AI, multilingual voice systems and machine learning. Six completed projects across AI systems and data science; several projects in active development; pre-publication research in spectroscopic AI.',
     9.6,
     { gapAfter: 1 }
   );
@@ -140,7 +138,13 @@ export const downloadResumePdf = (filename = 'Datta_Srinikesh_Chinta_Resume.pdf'
     write(sys.description, 9.6, { gapAfter: 0.8 });
     write(`Tech: ${sys.technology.join(', ')}`, 9, { color: MUTED, gapAfter: 2.6 });
   });
-  write('ADDITIONAL PROJECTS \u2014 IN DEVELOPMENT', 9.6, { bold: true, gapAfter: 0.8 });
+  write('DATA SCIENCE & ML PROJECTS', 9.6, { bold: true, gapAfter: 0.8 });
+  write(
+    MINI_PROJECTS.map((p) => `${p.title} (${p.date})`).join('  \u00b7  '),
+    9.3,
+    { color: SOFT, gapAfter: 1 }
+  );
+  write('PROJECTS IN DEVELOPMENT', 9.6, { bold: true, gapAfter: 0.8 });
   write(
     BUILDING_PROJECTS.map((p) => `${p.name} (${p.status.toLowerCase()})`).join('  \u00b7  '),
     9.3,
@@ -161,8 +165,8 @@ export const downloadResumePdf = (filename = 'Datta_Srinikesh_Chinta_Resume.pdf'
 
   /* ---------- Skills ---------- */
   section('Technical Skills');
-  SKILL_SECTIONS.forEach((sec) => {
-    write(`${sec.heading}: ${skillLineFor(sec.category)}`, 9.6, { gapAfter: 1.6 });
+  CATEGORY_ORDER.forEach((cat) => {
+    write(`${CATEGORY_LABELS[cat] || cat}: ${skillLineFor(cat)}`, 9.6, { gapAfter: 1.6 });
   });
 
   /* ---------- Certifications ---------- */

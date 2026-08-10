@@ -4,6 +4,7 @@ import {
   CERTIFICATIONS,
   COMPLETED_SYSTEMS,
   EXPERIENCE,
+  MINI_PROJECTS,
   MUSIC,
   PERSONAL,
   RESEARCH,
@@ -14,19 +15,16 @@ import {
 /*  ATS-friendly, LaTeX-style resume body (single column, selectable)  */
 /* ------------------------------------------------------------------ */
 
-const SKILL_SECTIONS: { heading: string; category: string }[] = [
-  { heading: 'Programming', category: 'Programming' },
-  { heading: 'AI / ML', category: 'AI & ML' },
-  { heading: 'Frameworks', category: 'Frameworks & Stack' },
-  { heading: 'Tools / Platforms', category: 'Cloud, Models & Tools' },
-];
-
-const skillLineFor = (category: string): string => {
-  const match =
-    SKILLS.find((c) => c.category === category) ??
-    SKILLS.find((c) => c.category.toLowerCase().includes(category.toLowerCase()));
-  return match ? match.skills.map((s) => s.name).join(', ') : '';
+const CATEGORY_ORDER = ['Programming Languages', 'AI & Machine Learning', 'Data & Analytics', 'Professional & Tools'];
+const CATEGORY_LABELS: Record<string, string> = {
+  'Programming Languages': 'Programming',
+  'AI & Machine Learning': 'AI / ML',
+  'Data & Analytics': 'Data & Analytics',
+  'Professional & Tools': 'Professional & Tools',
 };
+
+const skillLineFor = (category: string): string =>
+  SKILLS.filter((s) => s.category === category).map((s) => s.name).join(', ');
 
 const shortUrl = (url: string): string => url.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
@@ -64,7 +62,7 @@ export const ResumeContent: React.FC = () => {
           AI / ML engineer focused on building production-oriented intelligent systems — voice AI,
           retrieval-augmented generation (RAG), AI agents and full-stack AI products. Experience across
           SaaS product development, conversational AI, multilingual voice systems and machine learning.
-          Two completed projects shipped and deployed; several projects in active development; pre-publication
+          Six completed projects across AI systems and data science; several projects in active development; pre-publication
           research in spectroscopic AI.
         </p>
       </section>
@@ -122,7 +120,13 @@ export const ResumeContent: React.FC = () => {
           ))}
         </div>
         <div className="mt-4">
-          <h3 className="text-[12px] font-bold text-ink">Additional Projects — In Development</h3>
+          <h3 className="text-[12px] font-bold text-ink">Data Science & ML Projects</h3>
+          <p className="mt-1 text-[11.5px] leading-relaxed text-ink">
+            {MINI_PROJECTS.map((p) => `${p.title} (${p.date})`).join(' · ')}
+          </p>
+        </div>
+        <div className="mt-3">
+          <h3 className="text-[12px] font-bold text-ink">Projects in Development</h3>
           <p className="mt-1 text-[11.5px] leading-relaxed text-ink">
             {BUILDING_PROJECTS.map((p) => `${p.name} (${p.status.toLowerCase()})`).join(' · ')}
           </p>
@@ -150,9 +154,9 @@ export const ResumeContent: React.FC = () => {
       <section>
         <SectionTitle>Technical Skills</SectionTitle>
         <div className="mt-3 space-y-2">
-          {SKILL_SECTIONS.map((sec) => (
-            <p key={sec.heading} className="text-[11.5px] leading-relaxed text-ink">
-              <span className="font-bold">{sec.heading}:</span> {skillLineFor(sec.category)}
+          {CATEGORY_ORDER.map((cat) => (
+            <p key={cat} className="text-[11.5px] leading-relaxed text-ink">
+              <span className="font-bold">{CATEGORY_LABELS[cat] || cat}:</span> {skillLineFor(cat)}
             </p>
           ))}
         </div>

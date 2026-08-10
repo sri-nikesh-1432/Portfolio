@@ -122,8 +122,13 @@ export const Terminal: React.FC<TerminalProps> = ({ open, onClose }) => {
         );
       });
     } else if (c === 'skills') {
-      SKILLS.forEach((cat) => {
-        out.push({ id: `sk-${cat.id}`, type: 'output', content: cat.skills.map((s) => s.name).join(' · ') });
+      const groups: Record<string, string[]> = {};
+      SKILLS.forEach((s) => {
+        (groups[s.category] ??= []).push(s.name);
+      });
+      Object.entries(groups).forEach(([cat, names]) => {
+        out.push({ id: `sk-${cat}`, type: 'success', content: `${cat}:` });
+        out.push({ id: `sk-${cat}-n`, type: 'output', content: `  ${names.join(' · ')}` });
       });
     } else if (c === 'certifications') {
       CERTIFICATIONS.forEach((cert) => {
