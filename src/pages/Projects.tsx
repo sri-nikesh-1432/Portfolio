@@ -1,20 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, CheckCircle2, TerminalSquare } from 'lucide-react';
+import { ArrowUpRight, BarChart3, CheckCircle2, ExternalLink, Github, TerminalSquare } from 'lucide-react';
 import { Reveal } from '../components/Reveal';
 import { SectionHeading } from '../components/SectionHeading';
 import { StatusChip } from '../components/StatusChip';
-import { COMPLETED_SYSTEMS } from '../data/portfolioData';
+import { COMPLETED_SYSTEMS, MINI_PROJECTS } from '../data/portfolioData';
+import { ProjectDetailModal } from '../components/projects/ProjectDetailModal';
+import type { MiniProject } from '../types';
 
 export const Projects: React.FC = () => {
+  const [selectedMini, setSelectedMini] = useState<MiniProject | null>(null);
+
   return (
     <div className="space-y-16">
       <SectionHeading
         eyebrow="Projects"
-        title={<>Completed projects — ready to demonstrate.</>}
-        description="These are the two projects I have built end-to-end and shipped. Each has a dedicated page with the full engineering story, and a live demo you can open."
+        title={<>Completed projects — systems and experiments.</>}
+        description="End-to-end AI systems and ML data science projects. Each has been built, tested and documented."
       />
 
+      {/* ---- Completed Systems ---- */}
       <div className="space-y-8">
         {COMPLETED_SYSTEMS.map((sys, i) => (
           <Reveal key={sys.id} delay={i * 100}>
@@ -48,10 +53,7 @@ export const Projects: React.FC = () => {
 
                 <div className="mt-6 flex flex-wrap gap-1.5">
                   {sys.technology.map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-md border border-line bg-white/70 px-2.5 py-1 font-mono text-[9.5px] uppercase tracking-[0.1em] text-muted"
-                    >
+                    <span key={t} className="rounded-md border border-line bg-white/70 px-2.5 py-1 font-mono text-[9.5px] uppercase tracking-[0.1em] text-muted">
                       {t}
                     </span>
                   ))}
@@ -71,7 +73,7 @@ export const Projects: React.FC = () => {
                       rel="noreferrer"
                       className="inline-flex items-center gap-2 rounded-xl border border-line bg-white/70 px-6 py-3.5 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-ink transition-all duration-300 hover:-translate-y-0.5 hover:border-accent-blue/40 hover:text-accent-blue"
                     >
-                      Live Demo <ArrowUpRight className="h-4 w-4" />
+                      Live Demo <ExternalLink className="h-4 w-4" />
                     </a>
                   )}
                 </div>
@@ -102,15 +104,72 @@ export const Projects: React.FC = () => {
         ))}
       </div>
 
-      {/* Honest count */}
+      {/* ---- Data Science & ML Projects ---- */}
+      <Reveal>
+        <div className="space-y-6">
+          <div className="flex items-center gap-3">
+            <BarChart3 className="h-5 w-5 text-accent-gold" />
+            <h2 className="font-display text-2xl font-medium text-ink">Data Science & ML Projects</h2>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            {MINI_PROJECTS.map((proj, i) => (
+              <Reveal key={proj.id} delay={i * 60}>
+                <button
+                  onClick={() => setSelectedMini(proj)}
+                  className="glass glass-hover group flex h-full w-full flex-col rounded-2xl p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-lift"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="font-display text-[16px] font-medium leading-snug text-ink transition-colors group-hover:text-accent-gold">
+                      {proj.title}
+                    </h3>
+                    <span className="shrink-0 rounded-lg bg-accent-gold/15 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-accent-gold">
+                      {proj.date}
+                    </span>
+                  </div>
+                  <p className="mt-3 flex-1 text-[13px] leading-relaxed text-muted">{proj.overview}</p>
+
+                  {/* Skills */}
+                  <div className="mt-4 flex flex-wrap gap-1">
+                    {proj.skills.map((s) => (
+                      <span key={s} className="rounded-md bg-accent-gold/10 px-2 py-0.5 font-mono text-[8.5px] uppercase tracking-[0.1em] text-accent-gold/80">
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Tech + action */}
+                  <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-line/50 pt-3">
+                    <div className="flex flex-wrap gap-1">
+                      {proj.technologies.slice(0, 3).map((t) => (
+                        <span key={t} className="rounded-md border border-line bg-white/60 px-2 py-0.5 font-mono text-[8.5px] uppercase tracking-[0.08em] text-muted">
+                          {t}
+                        </span>
+                      ))}
+                      {proj.technologies.length > 3 && (
+                        <span className="font-mono text-[8.5px] text-muted">+{proj.technologies.length - 3}</span>
+                      )}
+                    </div>
+                    <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-accent-gold/60 transition-colors group-hover:text-accent-gold">
+                      View details →
+                    </span>
+                  </div>
+                </button>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </Reveal>
+
+      {/* Project count */}
       <Reveal>
         <div className="flex flex-col items-center gap-4 rounded-3xl border border-line bg-white/60 py-10 text-center">
           <TerminalSquare className="h-8 w-8 text-accent-blue" />
           <p className="font-display text-3xl font-medium text-ink">
-            {String(COMPLETED_SYSTEMS.length).padStart(2, '0')} COMPLETED PROJECTS
+            {String(COMPLETED_SYSTEMS.length + MINI_PROJECTS.length).padStart(2, '0')} COMPLETED PROJECTS
           </p>
           <p className="max-w-md text-[13.5px] text-muted">
-            No inflated numbers here — this is exactly what is finished and demo-ready today.
+            Six projects across AI systems and data science — every one built, tested and documented.
           </p>
           <Link
             to="/building"
@@ -120,6 +179,8 @@ export const Projects: React.FC = () => {
           </Link>
         </div>
       </Reveal>
+
+      <ProjectDetailModal project={selectedMini!} open={!!selectedMini} onClose={() => setSelectedMini(null)} />
     </div>
   );
 };
