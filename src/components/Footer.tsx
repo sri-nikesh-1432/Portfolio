@@ -30,7 +30,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenTerminal }) => {
             {[
               { href: PERSONAL.links.github, icon: Github, label: 'GitHub' },
               { href: PERSONAL.links.linkedin, icon: Linkedin, label: 'LinkedIn' },
-              { href: `mailto:${PERSONAL.email}`, icon: Mail, label: 'Email' },
+              { href: `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(PERSONAL.email)}`, icon: Mail, label: 'Email' },
               { href: `tel:${PERSONAL.phone.replace(/\s/g, '')}`, icon: Phone, label: 'Phone' },
             ].map(({ href, icon: Icon, label }) => (
               <a
