@@ -54,13 +54,31 @@ export interface Certification {
   issuer: string;
   issuerColor: string;
   date: string;
-  description: string;
+  credentialId?: string;
+  credentialUrl?: string;
 }
 
-export interface SkillCategory {
+export interface SkillItem {
   id: string;
+  name: string;
+  fullName: string;
   category: string;
-  skills: { name: string; level?: number; note: string }[];
+  experience: string[];
+}
+
+export interface MiniProject {
+  id: string;
+  title: string;
+  date: string;
+  organization?: string;
+  overview: string;
+  features: string[];
+  technologies: string[];
+  concepts: string[];
+  skills: string[];
+  githubUrl?: string;
+  demoUrl?: string;
+  previewImage?: string;
 }
 
 export interface TerminalEntry {
