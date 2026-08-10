@@ -115,15 +115,19 @@ async function sendNotification(record, skillName) {
   try {
     const resend = new Resend(apiKey);
     const when = new Date(record.date || record.createdAt);
-    const submitted = `${new Intl.DateTimeFormat('en-GB', {
+    const datePart = new Intl.DateTimeFormat('en-GB', {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
+      timeZone: 'Asia/Kolkata',
+    }).format(when);
+    const timePart = new Intl.DateTimeFormat('en-GB', {
       hour: '2-digit',
       minute: '2-digit',
       hour12: false,
       timeZone: 'Asia/Kolkata',
-    }).format(when)} IST`;
+    }).format(when);
+    const submitted = `${datePart}, ${timePart} IST`;
 
     const text = [
       'New Skill Endorsement',
