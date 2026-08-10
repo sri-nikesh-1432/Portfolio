@@ -3,27 +3,45 @@ import type { IconType } from 'react-icons';
 import type { LucideIcon } from 'lucide-react';
 import {
   SiPython,
-  SiTypescript,
-  SiJavascript,
-  SiOpenjdk,
   SiFastapi,
   SiReact,
-  SiNodedotjs,
-  SiPandas,
-  SiPlotly,
-  SiHuggingface,
+  SiMysql,
+  SiClaude,
+  SiGooglecolab,
   SiGithub,
+  SiMongodb,
+  SiDatabricks,
+  SiKaggle,
+  SiJupyter,
+  SiLangchain,
+  SiHuggingface,
 } from 'react-icons/si';
 import {
   BrainCircuit,
   Network,
   Sparkles,
-  LibraryBig,
   AudioWaveform,
   ScanEye,
   Bot,
   Languages,
   Rocket,
+  BarChart3,
+  LineChart,
+  PieChart,
+  Database,
+  GitBranch,
+  Workflow,
+  Sigma,
+  Cpu,
+  GraduationCap,
+  Users,
+  Search,
+  Boxes,
+  Layers,
+  ScatterChart,
+  Binary,
+  Lightbulb,
+  CheckCircle2,
 } from 'lucide-react';
 
 type LogoSpec =
@@ -31,43 +49,53 @@ type LogoSpec =
   | { kind: 'lucide'; Icon: LucideIcon; className: string }
   | { kind: 'monogram'; letters: string; className: string };
 
-/* Tiles are warm glass; the className drives the logo colour so each skill
-   keeps a recognisable identity without breaking the parchment palette. */
+/* Warm-glass tiles; className drives the logo colour so each skill keeps a
+   recognisable identity without breaking the parchment palette. */
 const LOGO_MAP: Record<string, LogoSpec> = {
   /* ---------- Programming ---------- */
   Python: { kind: 'brand', Icon: SiPython, className: 'text-[#3572A5]' },
-  TypeScript: { kind: 'brand', Icon: SiTypescript, className: 'text-[#3178C6]' },
-  JavaScript: { kind: 'brand', Icon: SiJavascript, className: 'text-[#B0893F]' },
+  FastAPI: { kind: 'brand', Icon: SiFastapi, className: 'text-[#059669]' },
+  'React.js': { kind: 'brand', Icon: SiReact, className: 'text-[#61DAFB]' },
   SQL: { kind: 'monogram', letters: 'SQL', className: 'from-[#B0893F] to-[#7C5A20]' },
-  Java: { kind: 'brand', Icon: SiOpenjdk, className: 'text-[#9E2B20]' },
+  MySQL: { kind: 'brand', Icon: SiMysql, className: 'text-[#2E6E9E]' },
+  'Data Structures': { kind: 'lucide', Icon: Binary, className: 'text-[#5E7A8C]' },
 
   /* ---------- AI & ML ---------- */
-  'Machine Learning': { kind: 'lucide', Icon: BrainCircuit, className: 'text-accent-gold' },
+  'Artificial Intelligence': { kind: 'lucide', Icon: BrainCircuit, className: 'text-accent-gold' },
+  'Machine Learning': { kind: 'lucide', Icon: Cpu, className: 'text-[#8C5A9E]' },
   'Deep Learning': { kind: 'lucide', Icon: Network, className: 'text-accent-copper' },
   'Generative AI': { kind: 'lucide', Icon: Sparkles, className: 'text-[#B06E2E]' },
-  RAG: { kind: 'lucide', Icon: LibraryBig, className: 'text-[#6E8B4E]' },
-  'Voice AI': { kind: 'lucide', Icon: AudioWaveform, className: 'text-accent-copper' },
+  'Natural Language Processing': { kind: 'lucide', Icon: Languages, className: 'text-[#6E8B4E]' },
   'Computer Vision': { kind: 'lucide', Icon: ScanEye, className: 'text-[#5E7A8C]' },
-  'AI Agents': { kind: 'lucide', Icon: Bot, className: 'text-accent-gold' },
-  NLP: { kind: 'lucide', Icon: Languages, className: 'text-[#6E8B4E]' },
+  'Conversational AI': { kind: 'lucide', Icon: Bot, className: 'text-accent-gold' },
+  'Multi-Lingual Voice Agents': { kind: 'lucide', Icon: AudioWaveform, className: 'text-accent-copper' },
+  'AI Agentic Automation': { kind: 'lucide', Icon: Workflow, className: 'text-[#8C5A9E]' },
+  'Claude Skills': { kind: 'brand', Icon: SiClaude, className: 'text-[#D97706]' },
+  'Prediction System': { kind: 'lucide', Icon: Rocket, className: 'text-accent-gold' },
+  'AI & ML Engineering': { kind: 'lucide', Icon: GraduationCap, className: 'text-accent-gold' },
 
-  /* ---------- Frameworks & Stack ---------- */
-  FastAPI: { kind: 'brand', Icon: SiFastapi, className: 'text-[#059669]' },
-  React: { kind: 'brand', Icon: SiReact, className: 'text-[#61DAFB]' },
-  'Node.js': { kind: 'brand', Icon: SiNodedotjs, className: 'text-[#5FA04E]' },
-  'Pandas / NumPy': { kind: 'brand', Icon: SiPandas, className: 'text-[#8C4D9E]' },
-  'Plotly / Matplotlib / Seaborn': { kind: 'brand', Icon: SiPlotly, className: 'text-[#3F7FA8]' },
+  /* ---------- Data & Analytics ---------- */
+  'Data Science': { kind: 'lucide', Icon: Database, className: 'text-accent-gold' },
+  'Data Analytics': { kind: 'lucide', Icon: BarChart3, className: 'text-accent-copper' },
+  'Exploratory Data Analysis': { kind: 'lucide', Icon: PieChart, className: 'text-[#6E8B4E]' },
+  'Scatter Plot': { kind: 'lucide', Icon: ScatterChart, className: 'text-[#3F7FA8]' },
+  'Feature Engineering': { kind: 'lucide', Icon: Layers, className: 'text-[#8C5A9E]' },
+  'Data Splitting': { kind: 'lucide', Icon: GitBranch, className: 'text-accent-copper' },
+  'Model Evaluation': { kind: 'lucide', Icon: CheckCircle2, className: 'text-status-green' },
+  'Linear Regression': { kind: 'lucide', Icon: LineChart, className: 'text-[#3F7FA8]' },
+  Matplotlib: { kind: 'monogram', letters: 'plt', className: 'from-[#B0893F] to-[#7C5A20]' },
+  'Foundations of Data Science': { kind: 'lucide', Icon: Sigma, className: 'text-accent-copper' },
 
-  /* ---------- Cloud, Models & Tools ---------- */
-  Groq: { kind: 'monogram', letters: 'GQ', className: 'from-[#B0352A] to-[#7C1F18]' },
-  'OpenAI / Hugging Face': { kind: 'brand', Icon: SiHuggingface, className: 'text-[#E8930C]' },
-  AWS: { kind: 'monogram', letters: 'AWS', className: 'from-[#B06E2E] to-[#7C4A1E]' },
-  Deployment: { kind: 'lucide', Icon: Rocket, className: 'text-accent-gold' },
-  'Git & GitHub': { kind: 'brand', Icon: SiGithub, className: 'text-ink' },
+  /* ---------- Professional & Tools ---------- */
+  'Google Colab': { kind: 'brand', Icon: SiGooglecolab, className: 'text-[#E8930C]' },
+  'GitHub Fundamentals': { kind: 'brand', Icon: SiGithub, className: 'text-ink' },
+  'Team Coordination': { kind: 'lucide', Icon: Users, className: 'text-[#6E8B4E]' },
+  Engineering: { kind: 'lucide', Icon: Boxes, className: 'text-accent-copper' },
+  'Soft Skill Development': { kind: 'lucide', Icon: Lightbulb, className: 'text-accent-gold' },
 };
 
-/* Brand icons no longer shipped by Simple Icons (removed for trademark
-   reasons) fall back to a clean monogram — never a random unrelated logo. */
+/* Brand icons no longer shipped by Simple Icons fall back to a clean monogram —
+   never a random unrelated logo. */
 const FALLBACK: LogoSpec = { kind: 'monogram', letters: 'AI', className: 'from-[#B0893F] to-[#7C5A20]' };
 
 const toInitials = (name: string) =>
