@@ -17,33 +17,61 @@ const OWNER_EMAIL = process.env.PORTFOLIO_OWNER_EMAIL || 'srinikeshchinta@gmail.
 const EMAIL_FROM = process.env.RESEND_FROM || 'onboarding@resend.dev';
 
 /* ------------------------- storage adapter ------------------------- */
-// Uses Netlify Blobs when running inside Netlify (or `netlify dev`).
-// Falls back to a local JSON file so plain `npm run dev` (Vite middleware)
-// also works without any Netlify environment.
+// Persistence order:
+//   1. Netlify Blobs with the platform-injected context (auto-config), and
+//   2. Netlify Blobs with explicit siteID + token env vars (NETLIFY_SITE_ID /
+//      NETLIFY_API_TOKEN) — used when the runtime does not inject blob
+//      context (e.g. legacy runtimeAPIVersion 1 functions), and
+//   3. a local JSON file, only for plain `npm run dev` (Vite middleware).
 const DATA_FILE = path.join(process.cwd(), '.data', 'endorsements.json');
+const STORE_NAME = 'endorsements';
 
 let storageMode = null; // 'blobs' | 'file'
-let lastProbeError = null;
+let blobStore = null;
 
-async function detectMode() {
-  if (storageMode) return storageMode;
+function blobStoreWithExplicitConfig() {
+  const siteID = process.env.NETLIFY_SITE_ID;
+  const token = process.env.NETLIFY_API_TOKEN;
+  if (!siteID || !token) return null;
+  return getStore(STORE_NAME, { siteID, token });
+}
+
+async function getBlobStore() {
+  if (blobStore) return blobStore;
+  // 1. Platform-injected context (runtime sets globalThis.netlifyBlobsContext
+  //    or the NETLIFY_BLOBS_CONTEXT env var before invoking the handler).
   try {
-    const store = getStore({ name: 'endorsements' });
+    const store = getStore({ name: STORE_NAME });
     await store.get('__probe__');
+    blobStore = store;
     storageMode = 'blobs';
-    lastProbeError = null;
-  } catch (err) {
-    lastProbeError = err?.message || String(err);
-    storageMode = 'file';
+    return blobStore;
+  } catch {
+    /* fall through to explicit config */
   }
-  return storageMode;
+  // 2. Explicit siteID + token (a Netlify personal access token set as an
+  //    env var server-side; the runtime never exposes it to the browser).
+  const explicit = blobStoreWithExplicitConfig();
+  if (explicit) {
+    try {
+      await explicit.get('__probe__');
+      blobStore = explicit;
+      storageMode = 'blobs';
+      return blobStore;
+    } catch (err) {
+      console.error('[endorsements] Blob store with explicit config failed:', err?.message || err);
+    }
+  }
+  // 3. Local file (dev only). In the Lambda runtime the filesystem is read-only,
+  //    so writing must fail loudly rather than crash on an unhelpful ENOENT.
+  storageMode = 'file';
+  return null;
 }
 
 async function readAll() {
-  const mode = await detectMode();
-  if (mode === 'blobs') {
+  const store = await getBlobStore();
+  if (store) {
     try {
-      const store = getStore({ name: 'endorsements' });
       const raw = await store.get('all');
       return raw ? JSON.parse(raw) : { records: [] };
     } catch {
@@ -59,11 +87,13 @@ async function readAll() {
 }
 
 async function writeAll(data) {
-  const mode = await detectMode();
-  if (mode === 'blobs') {
-    const store = getStore({ name: 'endorsements' });
+  const store = await getBlobStore();
+  if (store) {
     await store.set('all', JSON.stringify(data));
     return;
+  }
+  if (process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    throw new Error('Endorsement storage is not configured for this runtime.');
   }
   await mkdir(path.dirname(DATA_FILE), { recursive: true });
   await writeFile(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
@@ -176,17 +206,6 @@ export async function handler(event) {
 
   if (method === 'GET') {
     const skill = clean(event.queryStringParameters?.skill, 64);
-    if (event.queryStringParameters?.debug === '1') {
-      await detectMode();
-      return json(200, {
-        storageMode,
-        probeError: lastProbeError,
-        blobsCtxEnv: Boolean(process.env.NETLIFY_BLOBS_CONTEXT),
-        blobsCtxGlobal: Boolean(globalThis.netlifyBlobsContext),
-        isLambda: Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME),
-        cwd: process.cwd(),
-      });
-    }
     const all = await readAll();
     if (!skill) {
       const counts = {};
