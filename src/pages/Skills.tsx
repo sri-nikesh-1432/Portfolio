@@ -26,31 +26,21 @@ export const Skills: React.FC = () => {
     <div className="space-y-16">
       <SectionHeading
         eyebrow="Skills"
-        title={<>The stack I build intelligent systems with.</>}
-        description="Categorized across programming, AI & ML, frameworks, and cloud — the technologies behind every system on this portfolio. Know one of them? Endorse it and it becomes real social proof."
+        title={<>The technologies I work with — endorsed by peers.</>}
+        description="Click any skill to see the associated experience. Know one of them? Endorse it and it becomes real social proof."
       />
 
-      {SKILLS.map((cat, i) => (
-        <Reveal key={cat.id} delay={(i % 2) * 90}>
-          <section>
-            <div className="mb-6 flex items-center gap-3">
-              <span className="inline-block h-px flex-1 bg-gradient-to-r from-transparent to-accent-gold/50" />
-              <p className="eyebrow text-[#8A5A2B]">{cat.category}</p>
-              <span className="inline-block h-px flex-1 bg-gradient-to-l from-transparent to-accent-gold/50" />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
-              {cat.skills.map((skill) => (
-                <SkillCard
-                  key={skill.name}
-                  skill={skill}
-                  initialCount={counts[skill.name] ?? 0}
-                />
-              ))}
-            </div>
-          </section>
-        </Reveal>
-      ))}
+      <Reveal>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
+          {SKILLS.map((skill) => (
+            <SkillCard
+              key={skill.id}
+              skill={skill}
+              initialCount={counts[skill.name] ?? 0}
+            />
+          ))}
+        </div>
+      </Reveal>
     </div>
   );
 };
