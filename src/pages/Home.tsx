@@ -69,7 +69,18 @@ export const Home: React.FC = () => {
                 .
               </h1>
             </Reveal>
-            <Reveal delay={220}>
+            <Reveal delay={180}>
+              <p className="mt-6 flex max-w-2xl flex-wrap gap-x-2 gap-y-1.5 text-[13.5px] leading-relaxed text-inkSoft">
+                {PERSONAL.proHeadline.split('|').map((part, i) => (
+                  <span key={i} className="inline-flex items-center gap-x-2">
+                    {i > 0 && <span className="text-accent-gold/70">|</span>}
+                    <span className={i === 0 ? 'font-semibold text-ink' : ''}>{part.trim()}</span>
+                  </span>
+                ))}
+              </p>
+            </Reveal>
+
+            <Reveal delay={260}>
               <div className="mt-8 max-w-xl border-t border-accent-gold/25 pt-6">
                 <h2 className="font-display text-[22px] font-medium leading-snug text-ink">
                   Building intelligence, not just software.

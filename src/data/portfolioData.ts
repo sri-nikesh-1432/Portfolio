@@ -3,7 +3,8 @@ import type {
   Certification,
   CompletedSystem,
   ExperienceItem,
-  SkillCategory,
+  MiniProject,
+  SkillItem,
 } from '../types';
 
 /* ------------------------------------------------------------------ */
@@ -15,6 +16,8 @@ export const PERSONAL = {
   firstName: 'Datta Srinikesh Chinta',
   role: 'AI Systems Engineer',
   headline: 'I build intelligent systems that can see, speak, reason and act.',
+  proHeadline:
+    "Python Developer | Gen AI and Voice AI Intern @Doneswaritechnologiesllp | Agentic AI Intern @Venixa | ML Engineer | Data Science | LLM's/RAG | AI Agentic Automation | LangChain | LangGraph | QA Automation Testing",
   tagline:
     'AI/ML engineer building intelligent agents, voice systems, retrieval engines and real-world AI products — from models to autonomous systems.',
   positioning:
@@ -50,7 +53,7 @@ export const PERSONAL = {
 };
 
 export const METRICS = [
-  { value: '02', label: 'Completed Projects', detail: 'Ready to demonstrate' },
+  { value: '06', label: 'Completed Projects', detail: 'Ready to demonstrate' },
   { value: '01', label: 'Pre-Publication Research', detail: 'YET TO BE PUBLISHED' },
   { value: '03+', label: 'Projects in Development', detail: 'Actively building' },
   { value: '08', label: 'Trinity Music Certifications', detail: 'Piano / Keyboard' },
@@ -138,6 +141,78 @@ export const COMPLETED_SYSTEMS: CompletedSystem[] = [
       { stage: 'Retrieval', detail: 'Top-k relevant chunks retrieved per query' },
       { stage: 'Groq LLM', detail: 'Context-aware, grounded response generation' },
     ],
+  },
+];
+
+/* ------------------------------------------------------------------ */
+/*  MINI PROJECTS — ML / Data Science projects                          */
+/* ------------------------------------------------------------------ */
+
+export const MINI_PROJECTS: MiniProject[] = [
+  {
+    id: 'house-price',
+    title: 'House Price Prediction — ML Real-World Project',
+    date: 'May 2026',
+    overview: 'Machine Learning project that predicts house prices using a real-world housing dataset from Kaggle. Features include area, bedrooms, bathrooms, stories, and parking.',
+    features: [
+      'Area-based price prediction',
+      'Multi-feature regression model',
+      'Feature importance analysis',
+      'Correlation heatmap visualization',
+    ],
+    technologies: ['Python', 'Pandas', 'Scikit-learn', 'Seaborn', 'Matplotlib', 'Google Colab'],
+    concepts: ['Regression', 'Train-Test Split', 'Model Evaluation', 'Feature Importance', 'Prediction System'],
+    skills: ['Machine Learning', 'Linear Regression', 'Feature Engineering', 'Model Evaluation'],
+    githubUrl: 'https://github.com/sri-nikesh-1432',
+  },
+  {
+    id: 'sales-dashboard',
+    title: 'Interactive Sales Dashboard — Data Analytics using Plotly',
+    date: 'May 2026',
+    overview: 'Interactive business sales dashboard built using Python and Plotly, featuring sales analysis, profit trends, regional insights, and product performance metrics.',
+    features: [
+      'Sales trend analysis by region',
+      'Profit trend visualization',
+      'Top-performing category identification',
+      'Monthly business trend tracking',
+      'Pie chart distribution views',
+    ],
+    technologies: ['Python', 'Pandas', 'Plotly', 'Google Colab'],
+    concepts: ['Data Visualization', 'Dashboard Design', 'Business Analytics', 'Regional Analysis'],
+    skills: ['Data Analytics', 'Scatter Plot', 'Python', 'Plotly'],
+    githubUrl: 'https://github.com/sri-nikesh-1432',
+  },
+  {
+    id: 'netflix-eda',
+    title: 'Netflix Exploratory Data Analysis',
+    date: 'May 2026',
+    overview: 'Exploratory Data Analysis project on the Netflix dataset using Python. Key findings include content distribution analysis, growth trends, and rating patterns.',
+    features: [
+      'Content distribution analysis (Movies vs TV Shows)',
+      'Country-wise content catalog comparison',
+      'Content growth trend analysis (2015+)',
+      'Rating distribution insights (TV-MA dominance)',
+    ],
+    technologies: ['Python', 'Pandas', 'Matplotlib', 'Seaborn', 'Google Colab'],
+    concepts: ['Data Cleaning', 'Exploratory Analysis', 'Data Visualization', 'Insight Generation'],
+    skills: ['Data Analytics', 'Foundations of Data Science', 'Python'],
+    githubUrl: 'https://github.com/sri-nikesh-1432/Netflix_EDA.git',
+  },
+  {
+    id: 'student-score',
+    title: 'Student Score Predictor — ML Pipeline Workflow Project',
+    date: 'May 2026',
+    overview: 'Machine Learning project that predicts student scores based on study hours using Linear Regression. Demonstrates the complete ML pipeline from data splitting to model evaluation.',
+    features: [
+      'Study hours vs score prediction',
+      'Train-test data splitting',
+      'Linear regression model implementation',
+      'Model performance evaluation',
+    ],
+    technologies: ['Python', 'Pandas', 'Scikit-learn', 'Matplotlib', 'Google Colab'],
+    concepts: ['Train-Test Split', 'Linear Regression', 'Model Evaluation', 'Prediction System'],
+    skills: ['Machine Learning', 'Data Splitting', 'Linear Regression', 'Model Evaluation', 'Prediction System'],
+    githubUrl: 'https://github.com/sri-nikesh-1432/Student_Score_Predictor.ipynb.git',
   },
 ];
 
@@ -582,168 +657,75 @@ export const EXPERIENCE: ExperienceItem[] = [
 ];
 
 /* ------------------------------------------------------------------ */
-/*  SKILLS                                                             */
+/*  SKILLS — LinkedIn-style flat list with associated experience        */
 /* ------------------------------------------------------------------ */
 
-export const SKILLS: SkillCategory[] = [
-  {
-    id: 'programming',
-    category: 'Programming',
-    skills: [
-      { name: 'Python', level: 5, note: 'Core language for AI/ML, FastAPI backends & automation' },
-      { name: 'TypeScript', level: 4, note: 'Typed full-stack frontend with React' },
-      { name: 'JavaScript', level: 4, note: 'Web & interactive systems' },
-      { name: 'SQL', level: 4, note: 'Querying & data modeling' },
-      { name: 'Java', level: 3, note: 'Object-oriented programming' },
-    ],
-  },
-  {
-    id: 'ai-ml',
-    category: 'AI & ML',
-    skills: [
-      { name: 'Machine Learning', level: 5, note: 'Scikit-learn, model evaluation, feature engineering' },
-      { name: 'Deep Learning', level: 4, note: 'CNNs & neural architectures' },
-      { name: 'Generative AI', level: 5, note: 'LLMs, prompt engineering, generation workflows' },
-      { name: 'RAG', level: 5, note: 'Chunking, embeddings, vector retrieval, grounded answers' },
-      { name: 'Voice AI', level: 5, note: 'STT \u2192 LLM \u2192 TTS real-time pipelines' },
-      { name: 'Computer Vision', level: 4, note: 'YOLOv8, detection & classification' },
-      { name: 'AI Agents', level: 4, note: 'Agentic AI, orchestration & automation' },
-      { name: 'NLP', level: 4, note: 'Semantic search, embeddings, multilingual' },
-    ],
-  },
-  {
-    id: 'frameworks',
-    category: 'Frameworks & Stack',
-    skills: [
-      { name: 'FastAPI', level: 5, note: 'Async Python backends & streaming APIs' },
-      { name: 'React', level: 5, note: 'Component-driven UIs & dashboards' },
-      { name: 'Node.js', level: 3, note: 'JavaScript runtimes & tooling' },
-      { name: 'Pandas / NumPy', level: 5, note: 'Data analysis & numerical computing' },
-      { name: 'Plotly / Matplotlib / Seaborn', level: 4, note: 'Visualization & EDA' },
-    ],
-  },
-  {
-    id: 'cloud-tools',
-    category: 'Cloud, Models & Tools',
-    skills: [
-      { name: 'Groq', level: 5, note: 'Whisper + Llama fast inference' },
-      { name: 'OpenAI / Hugging Face', level: 4, note: 'Model ecosystem & embeddings' },
-      { name: 'AWS', level: 3, note: 'EC2, S3, Lambda, Rekognition' },
-      { name: 'Deployment', level: 4, note: 'Netlify, Render, GitHub' },
-      { name: 'Git & GitHub', level: 5, note: 'Version control & collaboration' },
-    ],
-  },
+export const SKILLS: SkillItem[] = [
+  { id: 'python', name: 'Python', fullName: 'Python (Programming Language)', category: 'Programming Languages', experience: ['AI Developer Intern at VISWAM.AI', 'AI Powered Multi-Lingual Voice Agent for Spiritual Services', 'HackerRank Certified Python (Basic)', 'Agentic AI Intern at Venixa Private Limited'] },
+  { id: 'ai', name: 'Artificial Intelligence', fullName: 'Artificial Intelligence (AI)', category: 'AI & Machine Learning', experience: ['Agentic AI Intern at Venixa', 'AI Developer Intern at VISWAM.AI', 'AI Powered Multi-Lingual Voice Agent for Spiritual Services'] },
+  { id: 'ml', name: 'Machine Learning', fullName: 'Machine Learning', category: 'AI & Machine Learning', experience: ['AI Developer Intern at VISWAM.AI', 'R.M.D Engineering College', 'Student Score Predictor — ML Pipeline Workflow Project', 'House Price Prediction — ML Real-World Project'] },
+  { id: 'data-science', name: 'Data Science', fullName: 'Data Science', category: 'Data & Analytics', experience: [] },
+  { id: 'claude', name: 'Claude Skills', fullName: 'Claude Skills', category: 'AI & Machine Learning', experience: ['Claude 101', 'Claude Code in Action'] },
+  { id: 'agentic-automation', name: 'AI Agentic Automation', fullName: 'AI Agentic Automation', category: 'AI & Machine Learning', experience: ['Building AI Agents with MongoDB', 'MongoDB GenAI Developer'] },
+  { id: 'voice-agents', name: 'Multi-Lingual Voice Agents', fullName: 'Multi-Lingual Voice Agents', category: 'AI & Machine Learning', experience: ['Agentic AI Intern at Venixa'] },
+  { id: 'conversational-ai', name: 'Conversational AI', fullName: 'Conversational AI', category: 'AI & Machine Learning', experience: ['AI Powered Multi-Lingual Voice Agent for Spiritual Services'] },
+  { id: 'fastapi', name: 'FastAPI', fullName: 'FastAPI', category: 'Programming Languages', experience: ['AI Powered Multi-Lingual Voice Agent for Spiritual Services'] },
+  { id: 'react', name: 'React.js', fullName: 'React.js', category: 'Programming Languages', experience: ['AI Powered Multi-Lingual Voice Agent for Spiritual Services'] },
+  { id: 'sql', name: 'SQL', fullName: 'SQL', category: 'Programming Languages', experience: [] },
+  { id: 'eda', name: 'Exploratory Data Analysis', fullName: 'Exploratory Data Analysis (EDA)', category: 'Data & Analytics', experience: ['Agentic AI Intern at Venixa'] },
+  { id: 'team-coordination', name: 'Team Coordination', fullName: 'Team Coordination', category: 'Professional & Tools', experience: ['Agentic AI Intern at Venixa'] },
+  { id: 'aiml', name: 'AI & ML Engineering', fullName: 'Artificial Intelligence and Machine Learning', category: 'AI & Machine Learning', experience: ['AIML Intern at InternPe'] },
+  { id: 'scatter-plot', name: 'Scatter Plot', fullName: 'Scatter Plot', category: 'Data & Analytics', experience: ['Interactive Sales Dashboard — Data Analytics using Plotly'] },
+  { id: 'feature-engineering', name: 'Feature Engineering', fullName: 'Feature Engineering', category: 'Data & Analytics', experience: ['House Price Prediction — ML Real-World Project'] },
+  { id: 'data-analytics', name: 'Data Analytics', fullName: 'Data Analytics', category: 'Data & Analytics', experience: ['House Price Prediction — ML Real-World Project', 'Google Analytics Individual Qualification'] },
+  { id: 'prediction-system', name: 'Prediction System', fullName: 'Prediction System', category: 'AI & Machine Learning', experience: ['Student Score Predictor — ML Pipeline Workflow Project'] },
+  { id: 'linear-regression', name: 'Linear Regression', fullName: 'Linear Regression', category: 'Data & Analytics', experience: ['Student Score Predictor — ML Pipeline Workflow Project', 'House Price Prediction — ML Real-World Project'] },
+  { id: 'matplotlib', name: 'Matplotlib', fullName: 'Matplotlib', category: 'Data & Analytics', experience: ['Student Score Predictor — ML Pipeline Workflow Project'] },
+  { id: 'data-splitting', name: 'Data Splitting', fullName: 'Data Splitting', category: 'Data & Analytics', experience: ['Student Score Predictor — ML Pipeline Workflow Project'] },
+  { id: 'model-evaluation', name: 'Model Evaluation', fullName: 'Model Evaluation', category: 'Data & Analytics', experience: ['Student Score Predictor — ML Pipeline Workflow Project'] },
+  { id: 'github-fundamentals', name: 'GitHub Fundamentals', fullName: 'GitHub Fundamentals', category: 'Professional & Tools', experience: ['Agentic AI Intern at Venixa', 'Netflix Exploratory Data Analysis'] },
+  { id: 'data-science-foundations', name: 'Foundations of Data Science', fullName: 'Foundations of Data Science', category: 'Data & Analytics', experience: ['Netflix Exploratory Data Analysis', 'R.M.D Engineering College'] },
+  { id: 'google-colab', name: 'Google Colab', fullName: 'Google Colab', category: 'Professional & Tools', experience: ['Netflix Exploratory Data Analysis'] },
+  { id: 'mysql', name: 'MySQL', fullName: 'MySQL', category: 'Programming Languages', experience: ['HackerRank Certified SQL (Basic)'] },
+  { id: 'generative-ai', name: 'Generative AI', fullName: 'Generative AI', category: 'AI & Machine Learning', experience: ['Oracle Cloud Infrastructure 2025 Certified Generative AI Professional'] },
+  { id: 'data-structures', name: 'Data Structures', fullName: 'Data Structures', category: 'Programming Languages', experience: ['R.M.D Engineering College'] },
+  { id: 'nlp', name: 'Natural Language Processing', fullName: 'Natural Language Processing (NLP)', category: 'AI & Machine Learning', experience: [] },
+  { id: 'computer-vision', name: 'Computer Vision', fullName: 'Computer Vision', category: 'AI & Machine Learning', experience: [] },
+  { id: 'deep-learning', name: 'Deep Learning', fullName: 'Deep Learning', category: 'AI & Machine Learning', experience: ['AI Developer Intern at VISWAM.AI'] },
+  { id: 'engineering', name: 'Engineering', fullName: 'Engineering', category: 'Professional & Tools', experience: ['R.M.D Engineering College'] },
+  { id: 'soft-skills', name: 'Soft Skill Development', fullName: 'Soft Skill Development', category: 'Professional & Tools', experience: [] },
 ];
 
 /* ------------------------------------------------------------------ */
-/*  CERTIFICATIONS                                                     */
+/*  CERTIFICATIONS — grouped by issuer, exact titles & dates per spec  */
 /* ------------------------------------------------------------------ */
 
 export const CERTIFICATIONS: Certification[] = [
-  {
-    id: 'oci-genai',
-    title: 'OCI 2025 Generative AI Professional',
-    issuer: 'Oracle',
-    issuerColor: '#E02A2A',
-    date: '2025',
-    description: 'Generative AI architecture and OCI services.',
-  },
-  {
-    id: 'oci-ds',
-    title: 'OCI Data Science Professional',
-    issuer: 'Oracle',
-    issuerColor: '#E02A2A',
-    date: '2025',
-    description: 'End-to-end data science on Oracle Cloud.',
-  },
-  {
-    id: 'mongodb-genai',
-    title: 'GenAI Developer',
-    issuer: 'MongoDB',
-    issuerColor: '#00ED64',
-    date: '2025',
-    description: 'Building GenAI applications on MongoDB.',
-  },
-  {
-    id: 'mongodb-agents',
-    title: 'Building AI Agents',
-    issuer: 'MongoDB',
-    issuerColor: '#00ED64',
-    date: '2025',
-    description: 'Autonomous agent patterns & memory.',
-  },
-  {
-    id: 'anthropic-101',
-    title: 'Claude 101',
-    issuer: 'Anthropic',
-    issuerColor: '#D97706',
-    date: '2025',
-    description: 'Fundamentals of Claude & LLM prompting.',
-  },
-  {
-    id: 'anthropic-code',
-    title: 'Claude Code in Action',
-    issuer: 'Anthropic',
-    issuerColor: '#D97706',
-    date: '2025',
-    description: 'Agentic coding workflows with Claude.',
-  },
-  {
-    id: 'gcp-ai',
-    title: 'Google Cloud AI',
-    issuer: 'Google',
-    issuerColor: '#4285F4',
-    date: '2025',
-    description: 'Cloud AI & machine learning services.',
-  },
-  {
-    id: 'gcp-analytics',
-    title: 'Google Analytics',
-    issuer: 'Google',
-    issuerColor: '#4285F4',
-    date: '2025',
-    description: 'Digital analytics & measurement.',
-  },
-  {
-    id: 'databricks',
-    title: 'Databricks Fundamentals',
-    issuer: 'Databricks',
-    issuerColor: '#FF3621',
-    date: '2025',
-    description: 'Lakehouse platform & data workflows.',
-  },
-  {
-    id: 'hr-python',
-    title: 'Python (Basic)',
-    issuer: 'HackerRank',
-    issuerColor: '#2EC4B6',
-    date: '2025',
-    description: 'Core Python problem solving.',
-  },
-  {
-    id: 'hr-sql',
-    title: 'SQL (Basic)',
-    issuer: 'HackerRank',
-    issuerColor: '#2EC4B6',
-    date: '2025',
-    description: 'Relational querying & joins.',
-  },
-  {
-    id: 'hr-csharp',
-    title: 'C# (Basic)',
-    issuer: 'HackerRank',
-    issuerColor: '#2EC4B6',
-    date: '2025',
-    description: 'C# fundamentals & logic.',
-  },
-  {
-    id: 'scaler-aws',
-    title: 'AWS Fundamentals',
-    issuer: 'Scaler',
-    issuerColor: '#F27A18',
-    date: '2025',
-    description: 'AWS cloud fundamentals program.',
-  },
+  /* MongoDB */
+  { id: 'mongodb-genai', title: 'MongoDB GenAI Developer', issuer: 'MongoDB', issuerColor: '#00ED64', date: 'Jul 2026', credentialId: '' },
+  { id: 'mongodb-agents', title: 'Building AI Agents with MongoDB', issuer: 'MongoDB', issuerColor: '#00ED64', date: 'Jul 2026', credentialId: '' },
+
+  /* Anthropic */
+  { id: 'anthropic-code', title: 'Claude Code in Action', issuer: 'Anthropic', issuerColor: '#D97706', date: 'Jun 2026', credentialId: '' },
+  { id: 'anthropic-101', title: 'Claude 101', issuer: 'Anthropic', issuerColor: '#D97706', date: 'Jul 2026', credentialId: '' },
+
+  /* Google */
+  { id: 'gcp-ai', title: 'Google Certified Innovating with Google Cloud Artificial Intelligence', issuer: 'Google', issuerColor: '#4285F4', date: 'Oct 2025', credentialId: '' },
+  { id: 'gcp-analytics', title: 'Google Analytics Individual Qualification', issuer: 'Google', issuerColor: '#4285F4', date: 'Jul 2025', credentialId: '154253741', credentialUrl: 'https://www.credential.net/154253741' },
+
+  /* Oracle */
+  { id: 'oci-ds', title: 'Oracle Cloud Infrastructure 2025 Certified Data Science Professional', issuer: 'Oracle', issuerColor: '#E02A2A', date: 'Sep 2025', credentialId: '102592491OCI25DSOCP' },
+  { id: 'oci-genai', title: 'Oracle Cloud Infrastructure 2025 Certified Generative AI Professional', issuer: 'Oracle', issuerColor: '#E02A2A', date: 'Sep 2025', credentialId: '102483719OCI25GAIOCP' },
+
+  /* Scaler */
+  { id: 'scaler-aws', title: 'Scaler Topics Certified AWS Course', issuer: 'Scaler', issuerColor: '#F27A18', date: 'Oct 2025', credentialId: '' },
+
+  /* HackerRank (NO C#) */
+  { id: 'hr-sql', title: 'HackerRank Certified SQL (Basic)', issuer: 'HackerRank', issuerColor: '#2EC4B6', date: 'Oct 2025', credentialId: 'DC27ACC9E315', credentialUrl: 'https://www.hackerrank.com/certificates/DC27ACC9E315' },
+  { id: 'hr-python', title: 'HackerRank Certified Python (Basic)', issuer: 'HackerRank', issuerColor: '#2EC4B6', date: 'Jun 2024', credentialId: '2FDFEB568000', credentialUrl: 'https://www.hackerrank.com/certificates/2FDFEB568000' },
+
+  /* Databricks */
+  { id: 'databricks', title: 'Databricks Academy Certified Databricks Fundamentals Accreditation', issuer: 'Databricks', issuerColor: '#FF3621', date: 'Oct 2025', credentialId: '' },
 ];
 
 /* ------------------------------------------------------------------ */
