@@ -5,8 +5,8 @@ export interface PublicEndorsement {
   id: string;
   name: string;
   role: string;
+  email: string;
   date: string;
-  compliment?: string;
 }
 
 export interface EndorsementSubmission {
@@ -14,7 +14,7 @@ export interface EndorsementSubmission {
   name: string;
   role: string;
   email: string;
-  compliment?: string;
+  suggestion?: string;
   consent: boolean;
 }
 

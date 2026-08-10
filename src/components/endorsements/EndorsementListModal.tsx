@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { BadgeCheck, Search, X } from 'lucide-react';
+import { BadgeCheck, Mail, Search, X } from 'lucide-react';
 import type { PublicEndorsement } from '../../lib/endorsementsApi';
 
 interface EndorsementListModalProps {
@@ -48,7 +48,7 @@ export const EndorsementListModal: React.FC<EndorsementListModalProps> = ({
           (e) =>
             e.name.toLowerCase().includes(q) ||
             e.role.toLowerCase().includes(q) ||
-            (e.compliment ?? '').toLowerCase().includes(q)
+            e.email.toLowerCase().includes(q)
         )
       : [...endorsements];
     return list.sort((a, b) =>
@@ -73,7 +73,7 @@ export const EndorsementListModal: React.FC<EndorsementListModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between border-b border-line bg-white/80 px-5 py-3.5">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-accent-blue to-accent-teal text-white">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-accent-gold to-accent-copper text-white">
               <BadgeCheck className="h-4 w-4" />
             </span>
             <div>
@@ -99,19 +99,19 @@ export const EndorsementListModal: React.FC<EndorsementListModalProps> = ({
 
         {/* Search + sort */}
         <div className="flex flex-wrap items-center gap-3 border-b border-line bg-white/60 px-5 py-3.5">
-          <div className="relative flex-1 min-w-[200px]">
+          <div className="relative min-w-[200px] flex-1">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-faint" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search by name, role or compliment..."
-              className="w-full rounded-xl border border-line bg-white/80 py-2.5 pl-9 pr-3 text-[13px] text-ink outline-none transition-all duration-200 placeholder:text-faint focus:border-accent-blue/60 focus:ring-2 focus:ring-accent-blue/15"
+              placeholder="Search by name, role or email..."
+              className="w-full rounded-xl border border-line bg-white/80 py-2.5 pl-9 pr-3 text-[13px] text-ink outline-none transition-all duration-200 placeholder:text-faint focus:border-accent-gold/60 focus:ring-2 focus:ring-accent-gold/15"
             />
           </div>
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as SortMode)}
-            className="rounded-xl border border-line bg-white/80 px-3 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.12em] text-ink outline-none transition-colors focus:border-accent-blue/60"
+            className="rounded-xl border border-line bg-white/80 px-3 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.12em] text-ink outline-none transition-colors focus:border-accent-gold/60"
           >
             <option value="newest">Newest</option>
             <option value="oldest">Oldest</option>
@@ -126,16 +126,14 @@ export const EndorsementListModal: React.FC<EndorsementListModalProps> = ({
               <p className="text-[13.5px] font-medium text-inkSoft">
                 {query ? 'No endorsements match your search.' : 'No endorsements yet.'}
               </p>
-              <p className="text-[12.5px] text-muted">
-                Be the first to endorse {skill}.
-              </p>
+              <p className="text-[12.5px] text-muted">Be the first to endorse {skill}.</p>
             </div>
           ) : (
             <div className="space-y-3">
               {filtered.map((e) => (
                 <div
                   key={e.id}
-                  className="rounded-xl border border-line bg-white/70 p-4 transition-colors hover:border-accent-blue/30"
+                  className="rounded-xl border border-line bg-white/70 p-4 transition-colors hover:border-accent-gold/30"
                 >
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <p className="text-[13.5px] font-semibold text-ink">{e.name}</p>
@@ -143,14 +141,13 @@ export const EndorsementListModal: React.FC<EndorsementListModalProps> = ({
                       {formatDate(e.date)}
                     </p>
                   </div>
-                  <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-accent-blue">
+                  <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-accent-gold">
                     {e.role}
                   </p>
-                  {e.compliment && (
-                    <p className="mt-1.5 text-[12.5px] italic leading-relaxed text-inkSoft">
-                      "{e.compliment}"
-                    </p>
-                  )}
+                  <p className="mt-1 flex items-center gap-1.5 text-[12px] text-inkSoft">
+                    <Mail className="h-3 w-3 text-faint" />
+                    {e.email}
+                  </p>
                 </div>
               ))}
             </div>
@@ -160,7 +157,7 @@ export const EndorsementListModal: React.FC<EndorsementListModalProps> = ({
         {/* Footer note */}
         <div className="border-t border-line bg-white/80 px-5 py-3">
           <p className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-faint">
-            Public endorsements only — email addresses are never displayed.
+            Public endorsements — names, roles and emails only. Suggestions stay private.
           </p>
         </div>
       </div>

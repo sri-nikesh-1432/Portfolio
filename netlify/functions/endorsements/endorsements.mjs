@@ -2,6 +2,10 @@
 /*  Endorsements API — Netlify Function                                 */
 /*  GET  /.netlify/functions/endorsements?skill=Python                  */
 /*  POST /.netlify/functions/endorsements                               */
+/*                                                                      */
+/*  Public responses expose ONLY id, name, role, email and date.         */
+/*  Suggestions/compliments are private — emailed to the owner, never    */
+/*  returned to the browser.                                             */
 /* ------------------------------------------------------------------ */
 import { getStore } from '@netlify/blobs';
 import { Resend } from 'resend';
@@ -89,15 +93,16 @@ function json(statusCode, payload, extraHeaders = {}) {
   return { statusCode, headers: { ...corsHeaders(), ...extraHeaders }, body: JSON.stringify(payload) };
 }
 
+/* Public shape is deliberately minimal: no suggestion, no ip, no consent,
+   no status, no internal ids beyond the record id used as a React key. */
 function toPublic(record) {
-  const out = {
+  return {
     id: record.id,
     name: record.name,
     role: record.role,
-    date: record.date,
+    email: record.email || '',
+    date: record.date || record.createdAt,
   };
-  if (record.compliment) out.compliment = record.compliment;
-  return out;
 }
 
 /* --------------------------- email notify -------------------------- */
@@ -109,29 +114,43 @@ async function sendNotification(record, skillName) {
   }
   try {
     const resend = new Resend(apiKey);
-    const submitted = new Date(record.date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
+    const when = new Date(record.date || record.createdAt);
+    const submitted = `${new Intl.DateTimeFormat('en-GB', {
       day: 'numeric',
-    });
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: 'Asia/Kolkata',
+    }).format(when)} IST`;
+
     const text = [
-      'New professional endorsement received.',
+      'New Skill Endorsement',
       '',
-      `Skill: ${skillName}`,
-      `Endorser: ${record.name}`,
-      `Role: ${record.role}`,
-      `Email: ${record.email}`,
-      record.compliment ? `Compliment / Suggestion: ${record.compliment}` : '',
+      'Skill:',
+      skillName,
       '',
-      `Submitted: ${submitted}`,
-    ]
-      .filter(Boolean)
-      .join('\n');
+      'Name:',
+      record.name,
+      '',
+      'Role:',
+      record.role,
+      '',
+      'Email:',
+      record.email,
+      '',
+      'Suggestion:',
+      record.suggestion ? record.suggestion : 'No suggestion provided.',
+      '',
+      'Submitted:',
+      submitted,
+    ].join('\n');
 
     await resend.emails.send({
       from: EMAIL_FROM,
       to: [OWNER_EMAIL],
-      subject: `New Skill Endorsement — ${skillName}`,
+      subject: `New Portfolio Skill Endorsement — ${skillName}`,
       text,
     });
     console.log(`[endorsements] Email notification sent for ${skillName}`);
@@ -157,7 +176,7 @@ export async function handler(event) {
       return json(200, { counts });
     }
     const endorsements = all.records
-      .filter((r) => r.skill === skill)
+      .filter((r) => r.skill === skill && r.email)
       .sort((a, b) => (a.date < b.date ? 1 : -1))
       .map(toPublic);
     return json(200, { skill, count: endorsements.length, endorsements });
@@ -175,16 +194,16 @@ export async function handler(event) {
     const name = clean(payload?.name, 80);
     const role = clean(payload?.role, 100);
     const email = clean(payload?.email, 254).toLowerCase();
-    const compliment = clean(payload?.compliment, 500);
+    const suggestion = clean(payload?.suggestion ?? payload?.compliment, 500);
     const consent = payload?.consent === true;
 
     const errors = {};
     if (!skill) errors.skill = 'Skill is required.';
-    if (!name) errors.name = 'Please enter your full name.';
+    if (!name) errors.name = 'Please enter your name.';
     if (!role) errors.role = 'Please enter your role or position.';
     if (!email) errors.email = 'Please enter your email address.';
     else if (!EMAIL_RE.test(email)) errors.email = 'Please enter a valid email address.';
-    if (!consent) errors.consent = 'Please agree to display your name and role.';
+    if (!consent) errors.consent = 'Please agree to display your name, role and email.';
 
     if (Object.keys(errors).length) {
       return json(422, { error: 'Validation failed.', fields: errors });
@@ -213,10 +232,12 @@ export async function handler(event) {
       name,
       role,
       email,
-      compliment: compliment || undefined,
-      date: new Date().toISOString(),
+      suggestion: suggestion || undefined,
       consent,
       ip,
+      status: 'approved',
+      createdAt: new Date().toISOString(),
+      date: new Date().toISOString(),
     };
 
     all.records.push(record);
