@@ -12,3 +12,10 @@
 
 [[netlify]]
   enable_blobs = true
+
+# SPA fallback: let the client-side router handle deep links (/skills, /projects, …).
+# Real files (llms.txt, assets) and the function routes take precedence.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
