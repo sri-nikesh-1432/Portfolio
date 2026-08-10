@@ -23,6 +23,7 @@ const EMAIL_FROM = process.env.RESEND_FROM || 'onboarding@resend.dev';
 const DATA_FILE = path.join(process.cwd(), '.data', 'endorsements.json');
 
 let storageMode = null; // 'blobs' | 'file'
+let lastProbeError = null;
 
 async function detectMode() {
   if (storageMode) return storageMode;
@@ -30,7 +31,9 @@ async function detectMode() {
     const store = getStore({ name: 'endorsements' });
     await store.get('__probe__');
     storageMode = 'blobs';
-  } catch {
+    lastProbeError = null;
+  } catch (err) {
+    lastProbeError = err?.message || String(err);
     storageMode = 'file';
   }
   return storageMode;
@@ -173,6 +176,17 @@ export async function handler(event) {
 
   if (method === 'GET') {
     const skill = clean(event.queryStringParameters?.skill, 64);
+    if (event.queryStringParameters?.debug === '1') {
+      await detectMode();
+      return json(200, {
+        storageMode,
+        probeError: lastProbeError,
+        blobsCtxEnv: Boolean(process.env.NETLIFY_BLOBS_CONTEXT),
+        blobsCtxGlobal: Boolean(globalThis.netlifyBlobsContext),
+        isLambda: Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME),
+        cwd: process.cwd(),
+      });
+    }
     const all = await readAll();
     if (!skill) {
       const counts = {};
