@@ -365,9 +365,16 @@ export async function handler(event) {
       console.error('[ENDORSEMENT] Email provider error:', err?.message || err);
       record.emailStatus = 'email_failed';
       await writeAll(all).catch(() => {});
+      // Surface the specific failure (e.g. a missing EMAIL_API_KEY) so the
+      // visitor/owner sees what to fix instead of a generic error.
+      const detail = err instanceof Error ? err.message : null;
       return json(
         500,
-        { error: 'The endorsement could not be completed. Please try again.', success: false, message: 'The endorsement could not be completed. Please try again.' },
+        {
+          error: detail || 'The endorsement could not be completed. Please try again.',
+          success: false,
+          message: detail || 'The endorsement could not be completed. Please try again.',
+        },
         event
       );
     }

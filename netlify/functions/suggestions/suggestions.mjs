@@ -326,7 +326,17 @@ export async function handler(event) {
     console.error('[SUGGESTION] Email provider error:', err?.message || err);
     record.status = 'email_failed';
     await writeAll(all).catch(() => {});
-    return json(500, { success: false, message: 'Unable to send your suggestion right now. Please try again.' }, event);
+    // Surface the specific failure (e.g. a missing EMAIL_API_KEY) so the
+    // visitor/owner sees what to fix instead of a generic error.
+    const detail = err instanceof Error ? err.message : null;
+    return json(
+      500,
+      {
+        success: false,
+        message: detail || 'Unable to send your suggestion right now. Please try again.',
+      },
+      event
+    );
   }
 
   record.status = 'email_sent';
