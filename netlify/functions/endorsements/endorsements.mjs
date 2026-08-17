@@ -184,13 +184,20 @@ async function sendNotification(record, skillName) {
       submitted,
     ].join('\n');
 
-    await resend.emails.send({
+    // Resend resolves with { data, error } instead of throwing on API errors
+    // (bad key, unverified sender, domain not configured) — surface those as
+    // failures instead of silently logging a false success.
+    const { data, error } = await resend.emails.send({
       from: EMAIL_FROM,
       to: [OWNER_EMAIL],
       subject: `New Portfolio Skill Endorsement — ${skillName}`,
       text,
     });
-    console.log(`[endorsements] Email notification sent for ${skillName}`);
+    if (error) {
+      console.error('[endorsements] Email notification failed:', error.message);
+      return;
+    }
+    console.log(`[endorsements] Email notification sent for ${skillName} (id: ${data?.id ?? 'n/a'})`);
   } catch (err) {
     console.error('[endorsements] Email notification failed:', err?.message || err);
   }
