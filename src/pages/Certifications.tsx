@@ -4,6 +4,9 @@ import { Reveal } from '../components/Reveal';
 import { SectionHeading } from '../components/SectionHeading';
 import { CERTIFICATIONS } from '../data/portfolioData';
 
+/* Every VIEW CREDENTIAL button opens this profile in a new tab. */
+const LINKEDIN_URL = 'https://www.linkedin.com/in/datta-srinikesh-chinta-986064333';
+
 /* Issuer config: name → display properties */
 const ISSUER_CONFIG: Record<string, { label: string; icon: string; color: string }> = {
   MongoDB: { label: 'MongoDB', icon: 'MDB', color: '#00ED64' },
@@ -69,21 +72,36 @@ export const Certifications: React.FC = () => {
                 {/* Cert list */}
                 <div className="flex flex-1 flex-col gap-2 px-5 py-4">
                   {certs.map((cert) => (
-                    <button
+                    <div
                       key={cert.id}
-                      onClick={() => setSelected(cert)}
-                      className="group/cert flex w-full items-start gap-3 rounded-xl px-3 py-2.5 text-left transition-all duration-200 hover:bg-accent-gold/10"
+                      className="group/cert flex w-full items-center gap-2 rounded-xl px-3 py-2.5 transition-all duration-200 hover:bg-accent-gold/10"
                     >
-                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-gold/20">
-                        <BadgeCheck className="h-3.5 w-3.5 text-accent-gold" />
-                      </span>
-                      <div className="min-w-0">
-                        <p className="text-[13px] font-medium leading-snug text-ink transition-colors group-hover/cert:text-accent-gold">
-                          {cert.title}
-                        </p>
-                        <p className="mt-0.5 font-mono text-[10px] text-muted">{cert.date}</p>
-                      </div>
-                    </button>
+                      <button
+                        onClick={() => setSelected(cert)}
+                        aria-label={`View details for ${cert.title}`}
+                        className="flex min-w-0 flex-1 items-start gap-3 text-left"
+                      >
+                        <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-gold/20">
+                          <BadgeCheck className="h-3.5 w-3.5 text-accent-gold" />
+                        </span>
+                        <div className="min-w-0">
+                          <p className="text-[13px] font-medium leading-snug text-ink transition-colors group-hover/cert:text-accent-gold">
+                            {cert.title}
+                          </p>
+                          <p className="mt-0.5 font-mono text-[10px] text-muted">{cert.date}</p>
+                        </div>
+                      </button>
+                      <a
+                        href={LINKEDIN_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`View credential for ${cert.title}`}
+                        className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-wooddark px-3 py-2 font-mono text-[9.5px] font-medium uppercase tracking-[0.14em] text-[#F4EBDC] shadow-brass transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift"
+                      >
+                        <ExternalLink className="h-3.5 w-3.5" />
+                        View Credential
+                      </a>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -161,17 +179,15 @@ const CertDetailModal: React.FC<{ cert: typeof CERTIFICATIONS[number]; onClose: 
             {cert.credentialId && <InfoRow label="Credential ID" value={cert.credentialId} />}
           </div>
 
-          {cert.credentialUrl && (
-            <a
-              href={cert.credentialUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-wooddark px-5 py-3 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-[#F4EBDC] shadow-brass transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift"
-            >
-              <ExternalLink className="h-4 w-4" />
-              View Credential
-            </a>
-          )}
+          <a
+            href={LINKEDIN_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-wooddark px-5 py-3 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-[#F4EBDC] shadow-brass transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift"
+          >
+            <ExternalLink className="h-4 w-4" />
+            View Credential
+          </a>
         </div>
       </div>
     </div>
