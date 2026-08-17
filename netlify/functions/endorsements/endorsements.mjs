@@ -3,9 +3,9 @@
 /*  GET  /.netlify/functions/endorsements?skill=Python                  */
 /*  POST /.netlify/functions/endorsements                               */
 /*                                                                      */
-/*  Public responses expose ONLY id, name, role, email and date.         */
-/*  Suggestions/compliments are private — emailed to the owner, never    */
-/*  returned to the browser.                                             */
+/*  Public responses expose ONLY id, name, role and date. The endorser's */
+/*  email, IP and suggestion/compliment are private — they are emailed   */
+/*  to the owner and never returned to the browser.                      */
 /* ------------------------------------------------------------------ */
 import { getStore } from '@netlify/blobs';
 import { Resend } from 'resend';
@@ -13,8 +13,12 @@ import { randomUUID } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-const OWNER_EMAIL = process.env.PORTFOLIO_OWNER_EMAIL || 'srinikeshchinta@gmail.com';
-const EMAIL_FROM = process.env.RESEND_FROM || 'onboarding@resend.dev';
+const OWNER_EMAIL =
+  process.env.ENDORSEMENT_RECIPIENT ||
+  process.env.PORTFOLIO_OWNER_EMAIL ||
+  'srinikeshchinta@gmail.com';
+const EMAIL_FROM = process.env.EMAIL_FROM || process.env.RESEND_FROM || 'onboarding@resend.dev';
+const EMAIL_API_KEY = process.env.EMAIL_API_KEY || process.env.RESEND_API_KEY;
 
 /* ------------------------- storage adapter ------------------------- */
 // Persistence order:
@@ -113,94 +117,150 @@ function clientIp(event) {
   return event.headers?.['x-nf-client-connection-ip'] || event.requestContext?.identity?.sourceIp || 'unknown';
 }
 
-function corsHeaders() {
-  return {
-    'Access-Control-Allow-Origin': '*',
+function corsHeaders(event) {
+  const headers = {
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Content-Type': 'application/json',
   };
+  // Same-origin requests (the deployed portfolio) don't need CORS headers at
+  // all; only echo an origin when it is a known dev origin or the configured
+  // production origin (ALLOWED_ORIGIN). Never wildcard in production.
+  const origin = event?.headers?.['origin'];
+  const allowed = process.env.ALLOWED_ORIGIN;
+  const isDevOrigin = typeof origin === 'string' && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+  if (origin && (isDevOrigin || (allowed && origin === allowed))) {
+    headers['Access-Control-Allow-Origin'] = origin;
+  }
+  return headers;
 }
 
-function json(statusCode, payload, extraHeaders = {}) {
-  return { statusCode, headers: { ...corsHeaders(), ...extraHeaders }, body: JSON.stringify(payload) };
+function json(statusCode, payload, event, extraHeaders = {}) {
+  return { statusCode, headers: { ...corsHeaders(event), ...extraHeaders }, body: JSON.stringify(payload) };
 }
 
-/* Public shape is deliberately minimal: no suggestion, no ip, no consent,
-   no status, no internal ids beyond the record id used as a React key. */
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/* Public shape is deliberately minimal: no email, no suggestion, no ip, no
+   consent, no status — only what is safe to show publicly. */
 function toPublic(record) {
   return {
     id: record.id,
     name: record.name,
     role: record.role,
-    email: record.email || '',
     date: record.date || record.createdAt,
   };
 }
 
 /* --------------------------- email notify -------------------------- */
 async function sendNotification(record, skillName) {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    console.log('[endorsements] RESEND_API_KEY not set — skipping email notification.');
-    return;
+  if (!EMAIL_API_KEY) {
+    // Never report a fake success: without a key the email cannot be sent, so
+    // fail loudly in every environment (dev included) instead of skipping.
+    throw new Error(
+      'Email service is not configured (EMAIL_API_KEY missing). Add it to your .env file (dev) or Netlify environment variables (production).'
+    );
   }
-  try {
-    const resend = new Resend(apiKey);
-    const when = new Date(record.date || record.createdAt);
-    const datePart = new Intl.DateTimeFormat('en-GB', {
+  if (EMAIL_FROM === 'onboarding@resend.dev') {
+    console.warn(
+      '[ENDORSEMENT] EMAIL_FROM is unset — using onboarding@resend.dev. Resend only delivers from this sender to the account owner; set EMAIL_FROM to a verified sender for reliable delivery.'
+    );
+  }
+
+  const when = new Date(record.date || record.createdAt);
+  const submitted =
+    new Intl.DateTimeFormat('en-GB', {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
-      timeZone: 'Asia/Kolkata',
-    }).format(when);
-    const timePart = new Intl.DateTimeFormat('en-GB', {
       hour: '2-digit',
       minute: '2-digit',
-      hour12: false,
+      hour12: true,
       timeZone: 'Asia/Kolkata',
-    }).format(when);
-    const submitted = `${datePart}, ${timePart} IST`;
+    }).format(when) + ' IST';
 
-    const text = [
-      'New Skill Endorsement',
-      '',
-      'Skill:',
-      skillName,
-      '',
-      'Name:',
-      record.name,
-      '',
-      'Role:',
-      record.role,
-      '',
-      'Email:',
-      record.email,
-      '',
-      'Suggestion:',
-      record.suggestion ? record.suggestion : 'No suggestion provided.',
-      '',
-      'Submitted:',
-      submitted,
-    ].join('\n');
+  const text = [
+    'NEW SKILL ENDORSEMENT',
+    '',
+    'Skill:',
+    skillName,
+    '',
+    'Name:',
+    record.name,
+    '',
+    'Role:',
+    record.role,
+    '',
+    'Email:',
+    record.email,
+    '',
+    'Compliment:',
+    record.suggestion ? record.suggestion : 'No compliment provided.',
+    '',
+    'Submitted:',
+    submitted,
+    '',
+    'Portfolio:',
+    'Datta Srinikesh Chinta',
+  ].join('\n');
 
-    // Resend resolves with { data, error } instead of throwing on API errors
-    // (bad key, unverified sender, domain not configured) — surface those as
-    // failures instead of silently logging a false success.
-    const { data, error } = await resend.emails.send({
-      from: EMAIL_FROM,
-      to: [OWNER_EMAIL],
-      subject: `New Portfolio Skill Endorsement — ${skillName}`,
-      text,
-    });
-    if (error) {
-      console.error('[endorsements] Email notification failed:', error.message);
-      return;
+  const html = `
+    <div style="font-family: Georgia, 'Times New Roman', serif; background:#f4ebdc; padding:24px;">
+      <div style="max-width:560px; margin:0 auto; background:#ffffff; border:1px solid rgba(51,34,15,0.14); border-radius:16px; padding:28px;">
+        <p style="font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#a58d68; margin:0 0 12px;">New Skill Endorsement</p>
+        <h2 style="color:#33220f; margin:0 0 20px; font-size:22px;">${escapeHtml(record.name)} endorsed your <span style="color:#c9a24b;">${escapeHtml(skillName)}</span> skill.</h2>
+        <table style="width:100%; border-collapse:collapse; font-size:14px; color:#4e3a22;">
+          <tr><td style="padding:6px 0; color:#a58d68; width:110px;">Skill</td><td style="padding:6px 0;"><b>${escapeHtml(skillName)}</b></td></tr>
+          <tr><td style="padding:6px 0; color:#a58d68;">Name</td><td style="padding:6px 0;"><b>${escapeHtml(record.name)}</b></td></tr>
+          <tr><td style="padding:6px 0; color:#a58d68;">Role</td><td style="padding:6px 0;"><b>${escapeHtml(record.role)}</b></td></tr>
+          <tr><td style="padding:6px 0; color:#a58d68;">Email</td><td style="padding:6px 0;"><b>${escapeHtml(record.email)}</b></td></tr>
+          <tr><td style="padding:6px 0; color:#a58d68; vertical-align:top;">Compliment</td><td style="padding:6px 0;">${escapeHtml(record.suggestion || 'No compliment provided.')}</td></tr>
+          <tr><td style="padding:6px 0; color:#a58d68;">Submitted</td><td style="padding:6px 0;">${submitted}</td></tr>
+        </table>
+        <p style="margin:24px 0 0; font-size:12px; color:#7c6443; border-top:1px solid rgba(51,34,15,0.14); padding-top:14px;">
+          This is an automated notification from the Datta Srinikesh Chinta portfolio.
+        </p>
+      </div>
+    </div>`;
+
+  const resend = new Resend(EMAIL_API_KEY);
+  // Bounded retry: at most 2 attempts with a short backoff. Resend resolves
+  // with { data, error } instead of throwing on API errors (bad key,
+  // unverified sender, domain not configured), so those are surfaced too.
+  let lastError = null;
+  console.log('[ENDORSEMENT] Sending email');
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      const { data, error } = await resend.emails.send({
+        from: EMAIL_FROM,
+        to: [OWNER_EMAIL],
+        reply_to: record.email,
+        subject: `New Skill Endorsement — ${skillName}`,
+        text,
+        html,
+      });
+      if (error) {
+        lastError = new Error(error.message);
+      } else {
+        console.log(`[ENDORSEMENT] Email provider response received (id: ${data?.id ?? 'n/a'})`);
+        console.log('[ENDORSEMENT] Email accepted successfully');
+        return;
+      }
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error(String(err));
     }
-    console.log(`[endorsements] Email notification sent for ${skillName} (id: ${data?.id ?? 'n/a'})`);
-  } catch (err) {
-    console.error('[endorsements] Email notification failed:', err?.message || err);
+    if (attempt === 0) {
+      await new Promise((resolve) => setTimeout(resolve, 400));
+    }
   }
+  throw lastError || new Error('Email notification failed.');
 }
 
 /* ---------------------------- handlers ----------------------------- */
@@ -208,7 +268,7 @@ export async function handler(event) {
   const method = event.httpMethod || 'GET';
 
   if (method === 'OPTIONS') {
-    return { statusCode: 204, headers: corsHeaders(), body: '' };
+    return { statusCode: 204, headers: corsHeaders(event), body: '' };
   }
 
   if (method === 'GET') {
@@ -217,21 +277,22 @@ export async function handler(event) {
     if (!skill) {
       const counts = {};
       for (const r of all.records) counts[r.skill] = (counts[r.skill] || 0) + 1;
-      return json(200, { counts });
+      return json(200, { counts }, event);
     }
     const endorsements = all.records
       .filter((r) => r.skill === skill && r.email)
       .sort((a, b) => (a.date < b.date ? 1 : -1))
       .map(toPublic);
-    return json(200, { skill, count: endorsements.length, endorsements });
+    return json(200, { skill, count: endorsements.length, endorsements }, event);
   }
 
   if (method === 'POST') {
+    console.log('[ENDORSEMENT] Request received');
     let payload;
     try {
       payload = typeof event.body === 'string' ? JSON.parse(event.body) : event.body;
     } catch {
-      return json(400, { error: 'Invalid JSON body.' });
+      return json(400, { error: 'Invalid JSON body.' }, event);
     }
 
     const skill = clean(payload?.skill, 64);
@@ -250,24 +311,29 @@ export async function handler(event) {
     if (!consent) errors.consent = 'Please agree to display your name, role and email.';
 
     if (Object.keys(errors).length) {
-      return json(422, { error: 'Validation failed.', fields: errors });
+      return json(422, { error: 'Validation failed.', fields: errors }, event);
     }
+    console.log('[ENDORSEMENT] Validation passed');
 
     const all = await readAll();
     const now = Date.now();
     const ip = clientIp(event);
 
     // Duplicate submission protection — one endorsement per email per skill.
-    const already = all.records.some((r) => r.skill === skill && r.email === email);
+    // Records whose email never got delivered (emailStatus !== 'email_sent')
+    // do not count, so the visitor can retry after a provider failure.
+    const already = all.records.some(
+      (r) => r.skill === skill && r.email === email && r.emailStatus === 'email_sent'
+    );
     if (already) {
-      return json(409, { error: "You've already endorsed this skill. Thank you!" });
+      return json(409, { error: "You've already endorsed this skill. Thank you!" }, event);
     }
 
     // Basic rate limiting — max 5 endorsements per hour per IP.
     const hourAgo = now - 3600 * 1000;
     const recentFromIp = all.records.filter((r) => r.ip === ip && Date.parse(r.date) > hourAgo).length;
     if (recentFromIp >= 5) {
-      return json(429, { error: 'Too many endorsements from this device. Please try again later.' });
+      return json(429, { error: 'Too many endorsements from this device. Please try again later.' }, event);
     }
 
     const record = {
@@ -280,6 +346,7 @@ export async function handler(event) {
       consent,
       ip,
       status: 'approved',
+      emailStatus: 'email_pending',
       createdAt: new Date().toISOString(),
       date: new Date().toISOString(),
     };
@@ -288,12 +355,29 @@ export async function handler(event) {
     await writeAll(all);
 
     // Email notification — awaited so serverless doesn't terminate it mid-flight.
-    // sendNotification catches its own errors, so a failure can't fail the response.
-    await sendNotification(record, skill);
+    // Per spec, an endorsement only counts as successful when the email
+    // notification workflow has also succeeded. The record is kept either way
+    // (never silently lost); its emailStatus tells us whether the owner was
+    // actually notified, and a failed record can be retried by the visitor.
+    try {
+      await sendNotification(record, skill);
+    } catch (err) {
+      console.error('[ENDORSEMENT] Email provider error:', err?.message || err);
+      record.emailStatus = 'email_failed';
+      await writeAll(all).catch(() => {});
+      return json(
+        500,
+        { error: 'The endorsement could not be completed. Please try again.', success: false, message: 'The endorsement could not be completed. Please try again.' },
+        event
+      );
+    }
+
+    record.emailStatus = 'email_sent';
+    await writeAll(all).catch(() => {});
 
     const count = all.records.filter((r) => r.skill === skill).length;
-    return json(201, { ok: true, skill, count, endorsement: toPublic(record) });
+    return json(201, { ok: true, skill, count, endorsement: toPublic(record) }, event);
   }
 
-  return json(405, { error: 'Method not allowed.' });
+  return json(405, { error: 'Method not allowed.' }, event);
 }

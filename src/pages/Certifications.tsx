@@ -74,7 +74,7 @@ export const Certifications: React.FC = () => {
                   {certs.map((cert) => (
                     <div
                       key={cert.id}
-                      className="group/cert flex w-full items-center gap-2 rounded-xl px-3 py-2.5 transition-all duration-200 hover:bg-accent-gold/10"
+                      className="group/cert flex w-full flex-col gap-2.5 rounded-xl px-3 py-3 transition-all duration-200 hover:bg-accent-gold/10 sm:flex-row sm:items-center sm:gap-3"
                     >
                       <button
                         onClick={() => setSelected(cert)}
@@ -95,10 +95,11 @@ export const Certifications: React.FC = () => {
                         href={LINKEDIN_URL}
                         target="_blank"
                         rel="noopener noreferrer"
-                        aria-label={`View credential for ${cert.title}`}
-                        className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-wooddark px-3 py-2 font-mono text-[9.5px] font-medium uppercase tracking-[0.14em] text-[#F4EBDC] shadow-brass transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift"
+                        title={`View ${cert.title} credential on LinkedIn`}
+                        aria-label={`View credential for ${cert.title} on LinkedIn`}
+                        className="inline-flex w-full shrink-0 items-center justify-center gap-1.5 self-start rounded-lg border border-accent-gold/30 bg-accent-gold/6 px-3.5 py-2.5 font-mono text-[9.5px] font-medium uppercase tracking-[0.14em] text-accent-gold outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-gold/50 hover:bg-accent-gold/12 hover:shadow-lift focus-visible:ring-2 focus-visible:ring-accent-gold/40 sm:w-auto sm:self-center"
                       >
-                        <ExternalLink className="h-3.5 w-3.5" />
+                        <ExternalLink className="h-3.5 w-3.5 transition-transform duration-200 group-hover/cert:-translate-y-0.5 group-hover/cert:translate-x-0.5 group-hover/cert:scale-110" />
                         View Credential
                       </a>
                     </div>
@@ -183,9 +184,11 @@ const CertDetailModal: React.FC<{ cert: typeof CERTIFICATIONS[number]; onClose: 
             href={LINKEDIN_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-wooddark px-5 py-3 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-[#F4EBDC] shadow-brass transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift"
+            title={`View ${cert.title} credential on LinkedIn`}
+            aria-label={`View ${cert.title} credential on LinkedIn`}
+            className="holo-sheen group mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-wooddark px-5 py-3 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-[#F4EBDC] shadow-brass outline-none transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift focus-visible:ring-2 focus-visible:ring-accent-gold/50"
           >
-            <ExternalLink className="h-4 w-4" />
+            <ExternalLink className="h-4 w-4 text-accent-gold transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             View Credential
           </a>
         </div>

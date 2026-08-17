@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { BadgeCheck, Mail, Search, X } from 'lucide-react';
+import { BadgeCheck, Search, X } from 'lucide-react';
 import type { PublicEndorsement } from '../../lib/endorsementsApi';
 
 interface EndorsementListModalProps {
@@ -45,10 +45,7 @@ export const EndorsementListModal: React.FC<EndorsementListModalProps> = ({
     const q = query.trim().toLowerCase();
     const list = q
       ? endorsements.filter(
-          (e) =>
-            e.name.toLowerCase().includes(q) ||
-            e.role.toLowerCase().includes(q) ||
-            e.email.toLowerCase().includes(q)
+          (e) => e.name.toLowerCase().includes(q) || e.role.toLowerCase().includes(q)
         )
       : [...endorsements];
     return list.sort((a, b) =>
@@ -104,7 +101,7 @@ export const EndorsementListModal: React.FC<EndorsementListModalProps> = ({
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search by name, role or email..."
+              placeholder="Search by name or role..."
               className="w-full rounded-xl border border-line bg-white/80 py-2.5 pl-9 pr-3 text-[13px] text-ink outline-none transition-all duration-200 placeholder:text-faint focus:border-accent-gold/60 focus:ring-2 focus:ring-accent-gold/15"
             />
           </div>
@@ -144,10 +141,6 @@ export const EndorsementListModal: React.FC<EndorsementListModalProps> = ({
                   <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-accent-gold">
                     {e.role}
                   </p>
-                  <p className="mt-1 flex items-center gap-1.5 text-[12px] text-inkSoft">
-                    <Mail className="h-3 w-3 text-faint" />
-                    {e.email}
-                  </p>
                 </div>
               ))}
             </div>
@@ -157,7 +150,7 @@ export const EndorsementListModal: React.FC<EndorsementListModalProps> = ({
         {/* Footer note */}
         <div className="border-t border-line bg-white/80 px-5 py-3">
           <p className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-faint">
-            Public endorsements — names, roles and emails only. Suggestions stay private.
+            Public endorsements — names and roles only. Emails and suggestions stay private.
           </p>
         </div>
       </div>

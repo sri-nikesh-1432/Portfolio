@@ -1,4 +1,4 @@
-import { defineConfig, type Plugin } from 'vite';
+import { defineConfig, loadEnv, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 
 /**
@@ -13,14 +13,19 @@ const endorsementsDevApi = (): Plugin => ({
     server.middlewares.use(async (req, res, next) => {
       const rawUrl = req.url ?? '';
       const pathname = rawUrl.split('?')[0];
-      if (
-        pathname !== '/.netlify/functions/endorsements' &&
-        pathname !== '/api/endorsements'
-      ) {
+      const isEndorsements =
+        pathname === '/.netlify/functions/endorsements' || pathname === '/api/endorsements';
+      const isSuggestions =
+        pathname === '/.netlify/functions/suggestions' || pathname === '/api/suggestions';
+      if (!isEndorsements && !isSuggestions) {
         return next();
       }
       try {
-        const { handler } = await import('./netlify/functions/endorsements/endorsements.mjs');
+        const { handler } = await import(
+          isEndorsements
+            ? './netlify/functions/endorsements/endorsements.mjs'
+            : './netlify/functions/suggestions/suggestions.mjs'
+        );
         const url = new URL(rawUrl, 'http://localhost');
         const queryStringParameters: Record<string, string> = {};
         url.searchParams.forEach((value, key) => {
@@ -52,18 +57,37 @@ const endorsementsDevApi = (): Plugin => ({
         console.error('[dev-endorsements-api]', err);
         res.statusCode = 500;
         res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify({ error: 'Internal server error' }));
+        // Surface the real error message in dev so misconfiguration (e.g. a
+        // missing EMAIL_API_KEY) is diagnosable instead of a generic 500.
+        res.end(
+          JSON.stringify({
+            error: err instanceof Error ? err.message : 'Internal server error',
+          })
+        );
       }
     });
   },
 });
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react(), endorsementsDevApi()],
-  server: {
-    port: 5173,
-    strictPort: true,
-    host: true,
-  },
+export default defineConfig(({ mode }) => {
+  // Vite only exposes .env values through import.meta.env — but the Netlify
+  // function code (and the Resend SDK) reads process.env. Surface the loaded
+  // values there so plain `npm run dev` has EMAIL_API_KEY, EMAIL_FROM, etc.
+  // Real shell environment variables always win (we never overwrite them).
+  const env = loadEnv(mode, process.cwd(), '');
+  for (const [key, value] of Object.entries(env)) {
+    if (value !== undefined && process.env[key] === undefined) {
+      process.env[key] = value;
+    }
+  }
+
+  return {
+    plugins: [react(), endorsementsDevApi()],
+    server: {
+      port: 5173,
+      strictPort: true,
+      host: true,
+    },
+  };
 });

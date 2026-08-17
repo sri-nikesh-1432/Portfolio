@@ -96,6 +96,9 @@ export const Building: React.FC = () => {
                   </span>
                   <h3 className="font-display text-xl font-medium text-ink">{proj.name}</h3>
                 </div>
+                <span className="font-mono text-[11px] font-medium tracking-[0.2em] text-faint">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
               </div>
 
               <div className="mt-3 flex items-center gap-2">
@@ -156,7 +159,7 @@ export const Building: React.FC = () => {
                 className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-accent-gold/30 bg-accent-gold/6 px-4 py-2.5 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-accent-gold transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent-gold/12"
               >
                 <Lightbulb className="h-3.5 w-3.5" />
-                Help build — suggest an idea
+                Suggest Idea
               </button>
             </article>
           </Reveal>

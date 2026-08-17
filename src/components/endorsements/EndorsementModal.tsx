@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { BadgeCheck, ShieldCheck, X } from 'lucide-react';
 import { submitEndorsement, EndorsementError } from '../../lib/endorsementsApi';
 import { SkillLogo } from '../skills/SkillLogo';
@@ -161,14 +162,18 @@ export const EndorsementModal: React.FC<EndorsementModalProps> = ({
     }
   };
 
-  return (
+  // The modal is rendered through a portal into document.body so it is fully
+  // independent of the Skills grid layout and any stacking context — it never
+  // occupies a grid/card position.
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/50 p-2 backdrop-blur-sm sm:p-4"
+      className="animate-modalBackdrop fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4"
+      style={{ backgroundColor: 'rgba(20, 15, 10, 0.45)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
       onClick={onClose}
     >
       <div
         ref={modalRef}
-        className="flex h-[calc(100dvh-16px)] w-[calc(100vw-16px)] max-w-[720px] flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-2xl sm:h-auto sm:max-h-[calc(100dvh-32px)] sm:w-[min(720px,calc(100vw-32px))]"
+        className="animate-modalPop flex max-h-[92vh] w-[calc(100%-24px)] flex-col overflow-hidden rounded-3xl border border-line bg-white shadow-2xl sm:max-h-[90vh] sm:w-[calc(100%-40px)] sm:max-w-[680px]"
         role="dialog"
         aria-modal="true"
         aria-label={`Endorse ${skill}`}
@@ -211,7 +216,7 @@ export const EndorsementModal: React.FC<EndorsementModalProps> = ({
               Endorsement Received
             </p>
             <p className="mx-auto max-w-sm text-[13.5px] leading-relaxed text-muted">
-              Thank you for endorsing {skill}. Your endorsement has been recorded successfully.
+              Thank you, {name}. Your endorsement for {skill} has been recorded successfully.
             </p>
             <p className="mt-2 inline-flex items-center gap-2 rounded-full border border-status-green/25 bg-status-green/10 px-4 py-1.5 font-mono text-[10.5px] font-medium uppercase tracking-[0.16em] text-status-green">
               <span className="h-1.5 w-1.5 animate-pulseSoft rounded-full bg-status-green" />
@@ -329,7 +334,7 @@ export const EndorsementModal: React.FC<EndorsementModalProps> = ({
                       className="mt-0.5 h-4 w-4 shrink-0 accent-[#B0893F]"
                     />
                     <span className="text-[12.5px] leading-relaxed text-inkSoft">
-                      I agree to have my name, role and email displayed publicly as an endorsement.
+                      I agree to have my name and role displayed publicly as an endorsement.
                     </span>
                   </label>
                   {errors.consent && (
@@ -337,8 +342,8 @@ export const EndorsementModal: React.FC<EndorsementModalProps> = ({
                   )}
                   <p className="mt-3 flex items-start gap-2 text-[11.5px] leading-relaxed text-muted">
                     <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-status-green" />
-                    Your name, role and email appear publicly as social proof. Your suggestion is
-                    private — it is sent only to the site owner.
+                    Your name and role appear publicly as social proof. Your email and suggestion
+                    are private — they are sent only to the site owner.
                   </p>
                 </div>
 
@@ -371,6 +376,7 @@ export const EndorsementModal: React.FC<EndorsementModalProps> = ({
           </form>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

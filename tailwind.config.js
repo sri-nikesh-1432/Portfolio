@@ -72,6 +72,14 @@ export default {
           '0%': { opacity: '0', transform: 'translateY(16px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
+        modalBackdrop: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        modalPop: {
+          '0%': { opacity: '0', transform: 'translateY(8px) scale(0.97)' },
+          '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+        },
       },
       animation: {
         float: 'float 7s ease-in-out infinite',
@@ -82,6 +90,8 @@ export default {
         marquee: 'marquee 32s linear infinite',
         pulseSoft: 'pulseSoft 2.4s ease-in-out infinite',
         riseIn: 'riseIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both',
+        modalBackdrop: 'modalBackdrop 0.25s ease-out both',
+        modalPop: 'modalPop 0.3s cubic-bezier(0.22, 1, 0.36, 1) both',
       },
     },
   },

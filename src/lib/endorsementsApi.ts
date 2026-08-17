@@ -1,11 +1,13 @@
 /* Frontend client for the endorsement API (Netlify Function in prod,
    Vite dev middleware on localhost:5173). */
 
+/* Public endorsement shape — deliberately excludes the endorser's email.
+   Emails are private: they are stored server-side and emailed to the owner,
+   but never returned to the browser. */
 export interface PublicEndorsement {
   id: string;
   name: string;
   role: string;
-  email: string;
   date: string;
 }
 

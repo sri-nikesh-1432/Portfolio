@@ -23,6 +23,7 @@ export const Contact: React.FC = () => {
                 label: 'Email',
                 value: PERSONAL.email,
                 href: `mailto:${PERSONAL.email}`,
+                ariaLabel: 'Email Datta Srinikesh Chinta',
                 color: 'from-accent-blue to-accent-lavender',
               },
               {
@@ -30,13 +31,16 @@ export const Contact: React.FC = () => {
                 label: 'Phone',
                 value: PERSONAL.phone,
                 href: `tel:${PERSONAL.phone.replace(/\s/g, '')}`,
+                ariaLabel: 'Call Datta Srinikesh Chinta',
                 color: 'from-accent-teal to-accent-blue',
               },
               {
                 icon: MapPin,
                 label: 'Location',
                 value: PERSONAL.location,
-                href: undefined,
+                href: 'https://www.google.com/maps/search/?api=1&query=Hyderabad%2C%20Telangana%2C%20India',
+                ariaLabel: "View Datta Srinikesh Chinta's location in Google Maps",
+                external: true,
                 color: 'from-accent-gold to-accent-red',
               },
             ].map((item) => (
@@ -53,16 +57,14 @@ export const Contact: React.FC = () => {
                   <p className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-faint">
                     {item.label}
                   </p>
-                  {item.href ? (
-                    <a
-                      href={item.href}
-                      className="mt-0.5 block truncate text-[14.5px] font-medium text-ink transition-colors hover:text-accent-blue"
-                    >
-                      {item.value}
-                    </a>
-                  ) : (
-                    <p className="mt-0.5 text-[14.5px] font-medium text-ink">{item.value}</p>
-                  )}
+                  <a
+                    href={item.href}
+                    aria-label={item.ariaLabel}
+                    {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    className="mt-0.5 block truncate text-[14.5px] font-medium text-ink transition-colors hover:text-accent-blue"
+                  >
+                    {item.value}
+                  </a>
                 </div>
               </div>
             ))}

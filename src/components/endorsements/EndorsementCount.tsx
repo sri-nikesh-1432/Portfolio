@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { ChevronRight, Mail, Users } from 'lucide-react';
+import { BadgeCheck, ChevronRight, Users } from 'lucide-react';
 import type { PublicEndorsement } from '../../lib/endorsementsApi';
 
 interface EndorsementCountProps {
@@ -41,7 +41,8 @@ export const EndorsementCount: React.FC<EndorsementCountProps> = ({
         Endorsed by {count} {count === 1 ? 'person' : 'people'}
       </button>
 
-      {/* Premium hover tooltip — name, role and email only. Suggestions stay private. */}
+      {/* Premium hover tooltip — name, role and endorsed skill only.
+          Emails and suggestions stay private. */}
       {previewOpen && endorsements.length > 0 && (
         <div className="absolute bottom-full left-1/2 z-30 mb-3 w-72 max-w-[calc(100vw-2rem)] -translate-x-1/2">
           <div className="glass rounded-xl border border-accent-gold/30 p-4 shadow-lift">
@@ -56,8 +57,8 @@ export const EndorsementCount: React.FC<EndorsementCountProps> = ({
                     {e.role}
                   </p>
                   <p className="mt-0.5 flex items-center gap-1 text-[11.5px] text-inkSoft">
-                    <Mail className="h-3 w-3 text-faint" />
-                    {e.email}
+                    <BadgeCheck className="h-3 w-3 text-faint" />
+                    Endorsed: {skill}
                   </p>
                 </div>
               ))}
